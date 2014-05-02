@@ -1,0 +1,12 @@
+#!/bin/bash
+export VNC_VIA_CMD='/usr/bin/ssh -2 -c aes128-cbc -x -p 2222 -l root -f -L %L:%H:%R %G sleep 20'
+
+[[ ! "$1" =~ ^mom|dad1|dad2|dad21$ ]] && echo -e "Usage:\n ${0##*/} mom|dad1|dad2" && exit -1
+[[ "mom" == "$1" ]] && HOST_AND_PORT=192.168.1.102:5901
+[[ "dad1" == "$1" ]] && HOST_AND_PORT=192.168.1.101:5900
+[[ "dad2" == "$1" ]] && HOST_AND_PORT=192.168.1.101:5800
+[[ "dad21" == "$1" ]] && HOST_AND_PORT=192.168.1.164:5900
+
+
+vncviewer -encodings Tight -depth 8 -quality 1 -via spg-ferenc.dyndns-home.com ${HOST_AND_PORT}
+

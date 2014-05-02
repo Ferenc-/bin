@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+pushd /tmp
+wget http://someonewhocares.org/hosts/zero/hosts
+cp /etc/hosts hosts_old
+vim -d hosts hosts_old
+sudo cp hosts /etc/hosts
+sudo cp hosts /etc/hosts.new
+popd

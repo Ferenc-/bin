@@ -1,0 +1,22 @@
+#!/bin/bash
+
+if [ "$1" == "on" ];
+then
+
+ file='/etc/hosts.new'
+
+elif [ "$1" == "off" ]
+then
+
+ file='/etc/hosts.orig'
+
+else
+
+ echo -e "Usage:\n\t${0##\*}  on | off "
+ exit 0
+
+fi
+
+# MAIN:
+sudo cp ${file} /etc/hosts
+

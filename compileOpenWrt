@@ -1,0 +1,50 @@
+#!/bin/bash
+
+OPENWRT_DIR=/tmp/openwrt
+
+type -f ccache 2>&1 >/dev/null
+if [[ $? != 0 ]]
+then
+    echo "Install ccache first!!!"
+    exit -1
+fi
+
+mkdir -p $OPENWRT_DIR
+pushd $OPENWRT_DIR
+
+if [[ $? != 0 ]]
+then
+    exit -1
+fi
+
+# Obtain SDK
+wget http://downloads.openwrt.org/attitude_adjustment/12.09/ar71xx/generic/OpenWrt-SDK-ar71xx-for-linux-i486-gcc-4.6-linaro_uClibc-0.9.33.2.tar.bz2
+tar -xf OpenWrt-SDK-ar71xx-for-linux-i486-gcc-4.6-linaro_uClibc-0.9.33.2.tar.bz2
+pushd OpenWrt-SDK-ar71xx-for-linux-i486-gcc-4.6-linaro_uClibc-0.9.33.2
+
+# ESSENTIAL ENVIRONMENTAL SETTINGS 
+export STAGING_DIR=$OPENWRT_DIR/OpenWrt-SDK-ar71xx-for-linux-i486-gcc-4.6-linaro_uClibc-0.9.33.2/staging_dir/toolchain-mips_r2_gcc-4.6-linaro_uClibc-0.9.33.2/
+export PATH=$STAGING_DIR/bin:$PATH
+# END ESSENTIAL ENVIRONMENTAL SETTINGS 
+
+# Obtain package Definitions 
+# browsable here https://dev.openwrt.org/browser/packages
+if [[ "$TEST" == "true" ]];
+then
+    svn export svn://svn.openwrt.org/openwrt/packages/utils/nano package/nano
+    svn export svn://svn.openwrt.org/openwrt/trunk/package/libs/ncurses package/ncurses
+
+    # Compile packages in topological order
+    make package/ncurses/compile
+    make package/nano/compile
+
+    # Make package index
+    make package/index
+
+    ls bin/ar71xx/packages/
+fi
+
+#svn export svn://svn.openwrt.org/openwrt/packages/lang/perl package/perl
+svn export svn://svn.openwrt.org/openwrt/packages/lang/perl-html-parser package/perl-html-parser 
+
+popd

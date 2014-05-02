@@ -1,0 +1,21 @@
+#!/bin/bash
+
+NEOVIM_DIR=/tmp/neovim
+
+mkdir -p $NEOVIM_DIR
+pushd $NEOVIM_DIR
+
+if [[ $? != 0 ]]
+then
+    exit -1
+fi
+
+
+# Clone neovim: 
+git clone https://github.com/neovim/neovim.git
+
+# 
+pushd neovim/neovim
+make
+
+./bin/nvim

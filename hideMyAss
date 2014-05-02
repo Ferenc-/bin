@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if [ "$1" == "on" ];
+then
+
+ command='cd /etc/openvpn && openvpn hma_openvpn.conf'
+
+elif [ "$1" == "off" ]
+then
+
+ command='kill $(pidof openvpn)'
+
+else
+
+ echo -e "Usage:\n\t${0##\*}  on | off "
+ exit 0
+
+fi
+
+#MAIN:
+ssh root@router ${command} 

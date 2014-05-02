@@ -1,0 +1,41 @@
+#!/bin/bash
+
+CLANG_COMP_DIR=/tmp/clang
+
+mkdir -p $CLANG_COMP_DIR 
+pushd $CLANG_COMP_DIR 
+
+if [[ $? != 0 ]]
+then
+    exit -1
+fi
+
+
+#Checkout LLVM: 
+svn co http://llvm.org/svn/llvm-project/llvm/trunk llvm
+
+
+#Checkout Clang:
+pushd llvm/tools
+svn co http://llvm.org/svn/llvm-project/cfe/trunk clang
+popd
+
+#Checkout extra Clang Tools: (optional) 
+pushd llvm/tools/clang/tools
+svn co http://llvm.org/svn/llvm-project/clang-tools-extra/trunk extra
+popd
+
+#Checkout Compiler-RT:
+pushd llvm/projects
+svn co http://llvm.org/svn/llvm-project/compiler-rt/trunk compiler-rt
+popd
+
+#Build LLVM and Clang:
+mkdir build #(for building without polluting the source dir)
+pushd build
+../llvm/configure
+make -j 8
+popd
+
+
+popd
