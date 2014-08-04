@@ -5,12 +5,11 @@ NEOVIM_DIR=/tmp/neovim
 
 checkReturnCode()
 {
-
-if [[ $? != 0 ]]
-then
-    echo "$1"
-    exit -1
-fi
+    if [[ $? != 0 ]]
+    then
+        echo "$1"
+        exit -1
+    fi
 }
 
 
@@ -19,13 +18,14 @@ checkReturnCode "Failed to create directory"
 pushd ${NEOVIM_DIR}
 checkReturnCode "Failed to change directory"
 
-# Clone neovim: 
+# Clone
 git clone git://github.com/neovim/neovim.git
 
-# 
+# Compile
 pushd ${NEOVIM_DIR}/neovim
 make
 checkReturnCode "Compilation Failed"
 
+# Run
 ./bin/nvim
 checkReturnCode "Neovim exited unexpectedly"
