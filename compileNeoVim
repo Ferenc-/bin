@@ -2,20 +2,30 @@
 
 NEOVIM_DIR=/tmp/neovim
 
-mkdir -p $NEOVIM_DIR
-pushd $NEOVIM_DIR
+
+checkReturnCode()
+{
 
 if [[ $? != 0 ]]
 then
+    echo "$1"
     exit -1
 fi
+}
 
+
+mkdir -p ${NEOVIM_DIR}
+checkReturnCode "Failed to create directory"
+pushd ${NEOVIM_DIR}
+checkReturnCode "Failed to change directory"
 
 # Clone neovim: 
 git clone https://github.com/neovim/neovim.git
 
 # 
-pushd neovim/neovim
+pushd ${NEOVIM_DIR}/neovim
 make
+checkReturnCode "Compilation Failed"
 
 ./bin/nvim
+checkReturnCode "Neovim exited unexpectedly"
