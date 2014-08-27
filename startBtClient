@@ -1,0 +1,2 @@
+#!/bin/bash
+ssh fileserver 'nohup qbittorrent-nox </dev/null >/dev/null 2>/dev/null &'
