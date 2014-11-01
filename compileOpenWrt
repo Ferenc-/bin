@@ -40,7 +40,6 @@ main()
         pushd ${SDK}
 
             # Obtain package Definitions 
-            git clone git@github.com:openwrt/packages.git
             ./scripts/feeds update packages
             ./scripts/feeds install -p packages nano
 
