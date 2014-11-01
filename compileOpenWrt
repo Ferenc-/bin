@@ -14,11 +14,10 @@ exitOnFail()
 
 checkSdkDependency()
 {
-    type -f make 2>&1 >/dev/null || exitOnFail "Install make first!"
-    type -f patch 2>&1 2>&1 >/dev/null || exitOnFail "Install patch!"
-    type -f wget 2>&1 2>&1 >/dev/null || exitOnFail "Install wget!"
+    type -f make   2>&1 >/dev/null || exitOnFail "Install make first!"
+    type -f patch  2>&1 >/dev/null || exitOnFail "Install patch!"
+    type -f wget   2>&1 >/dev/null || exitOnFail "Install wget!"
     type -f ccache 2>&1 >/dev/null || exitOnFail "Install ccache or disable CONFIG_CCACHE in .config"
-
 }
 
 getSDK()
