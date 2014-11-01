@@ -1,42 +1,59 @@
 #!/bin/bash
 
 OPENWRT_DIR=/tmp/openwrt
+SDK=OpenWrt-SDK-ar71xx-for-linux-x86_64-gcc-4.8-linaro_uClibc-0.9.33.2
+SDK_TAR=${SDK}.tar.bz2
+SDK_MD5=${SDK_TAR}.md5
+PLATFORM_URL=http://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/generic
 
-type -f ccache 2>&1 >/dev/null
-if [[ $? != 0 ]]
-then
-    echo "Install ccache first!!!"
+exitOnFail()
+{
+    echo -e "\n\t\t $1 \n"
     exit -1
-fi
+}
 
-mkdir -p $OPENWRT_DIR
-pushd $OPENWRT_DIR
+checkSdkDependency()
+{
+    type -f make 2>&1 >/dev/null || exitOnFail "Install make first!"
+    type -f patch 2>&1 2>&1 >/dev/null || exitOnFail "Install patch!"
+    type -f wget 2>&1 2>&1 >/dev/null || exitOnFail "Install wget!"
+    type -f ccache 2>&1 >/dev/null || exitOnFail "Install ccache or disable CONFIG_CCACHE in .config"
 
-if [[ $? != 0 ]]
-then
-    exit -1
-fi
+}
 
-# Obtain SDK
-wget http://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/generic/OpenWrt-SDK-ar71xx-for-linux-x86_64-gcc-4.8-linaro_uClibc-0.9.33.2.tar.bz2
-tar -xf OpenWrt-SDK-ar71xx-for-linux-x86_64-gcc-4.8-linaro_uClibc-0.9.33.2.tar.bz2
-pushd OpenWrt-SDK-ar71xx-for-linux-x86_64-gcc-4.8-linaro_uClibc-0.9.33.2
+getSDK()
+{
+    wget ${PLATFORM_URL}/${SDK_TAR}
+    curl -sL ${PLATFORM_URL}/md5sums | grep ${SDK_TAR} > ${SDK_MD5}
+    md5sum -c ${SDK_MD5} || exitOnFail "MD5 failed!!!" 
+    tar -xf ${SDK_TAR}
+}
 
-if [[ $? != 0 ]]
-then
-    exit -1
-fi
+main()
+{
+    checkSdkDependency
+    mkdir -p ${OPENWRT_DIR}
+    pushd ${OPENWRT_DIR}
 
-    # Obtain package Definitions 
-    git clone git@github.com:openwrt/packages.git
-    ./scripts/feeds update packages
-    ./scripts/feeds install -p packages nano
+        # Obtain SDK
+        getSDK
 
-    make package/nano/compile
+        pushd ${SDK}
 
-    # Make package index
-    make package/index
+            # Obtain package Definitions 
+            git clone git@github.com:openwrt/packages.git
+            ./scripts/feeds update packages
+            ./scripts/feeds install -p packages nano
 
-    ls -lah bin/ar71xx/packages/packages/
+            make package/nano/compile
 
-popd
+            # Make package index
+            make package/index
+
+            ls -lah bin/ar71xx/packages/packages/
+
+        popd
+    popd
+}
+
+main
