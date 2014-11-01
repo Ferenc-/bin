@@ -18,12 +18,12 @@ then
 fi
 
 # Obtain SDK
-wget http://downloads.openwrt.org/attitude_adjustment/12.09/ar71xx/generic/OpenWrt-SDK-ar71xx-for-linux-i486-gcc-4.6-linaro_uClibc-0.9.33.2.tar.bz2
-tar -xf OpenWrt-SDK-ar71xx-for-linux-i486-gcc-4.6-linaro_uClibc-0.9.33.2.tar.bz2
-pushd OpenWrt-SDK-ar71xx-for-linux-i486-gcc-4.6-linaro_uClibc-0.9.33.2
+wget http://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/generic/OpenWrt-SDK-ar71xx-for-linux-x86_64-gcc-4.8-linaro_uClibc-0.9.33.2.tar.bz2
+tar -xf OpenWrt-SDK-ar71xx-for-linux-x86_64-gcc-4.8-linaro_uClibc-0.9.33.2.tar.bz2
+pushd OpenWrt-SDK-ar71xx-for-linux-x86_64-gcc-4.8-linaro_uClibc-0.9.33.2
 
 # ESSENTIAL ENVIRONMENTAL SETTINGS 
-export STAGING_DIR=$OPENWRT_DIR/OpenWrt-SDK-ar71xx-for-linux-i486-gcc-4.6-linaro_uClibc-0.9.33.2/staging_dir/toolchain-mips_r2_gcc-4.6-linaro_uClibc-0.9.33.2/
+export STAGING_DIR=$CWD/staging_dir/toolchain-mips_r2_gcc-4.8-linaro_uClibc-0.9.33.2/
 export PATH=$STAGING_DIR/bin:$PATH
 # END ESSENTIAL ENVIRONMENTAL SETTINGS 
 
