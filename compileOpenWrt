@@ -22,29 +22,21 @@ wget http://downloads.openwrt.org/barrier_breaker/14.07/ar71xx/generic/OpenWrt-S
 tar -xf OpenWrt-SDK-ar71xx-for-linux-x86_64-gcc-4.8-linaro_uClibc-0.9.33.2.tar.bz2
 pushd OpenWrt-SDK-ar71xx-for-linux-x86_64-gcc-4.8-linaro_uClibc-0.9.33.2
 
-# ESSENTIAL ENVIRONMENTAL SETTINGS 
-export STAGING_DIR=$CWD/staging_dir/toolchain-mips_r2_gcc-4.8-linaro_uClibc-0.9.33.2/
-export PATH=$STAGING_DIR/bin:$PATH
-# END ESSENTIAL ENVIRONMENTAL SETTINGS 
-
-# Obtain package Definitions 
-# browsable here https://dev.openwrt.org/browser/packages
-if [[ "$TEST" == "true" ]];
+if [[ $? != 0 ]]
 then
-    svn export svn://svn.openwrt.org/openwrt/packages/utils/nano package/nano
-    svn export svn://svn.openwrt.org/openwrt/trunk/package/libs/ncurses package/ncurses
+    exit -1
+fi
 
-    # Compile packages in topological order
-    make package/ncurses/compile
+    # Obtain package Definitions 
+    git clone git@github.com:openwrt/packages.git
+    ./scripts/feeds update packages
+    ./scripts/feeds install -p packages nano
+
     make package/nano/compile
 
     # Make package index
     make package/index
 
-    ls bin/ar71xx/packages/
-fi
-
-#svn export svn://svn.openwrt.org/openwrt/packages/lang/perl package/perl
-svn export svn://svn.openwrt.org/openwrt/packages/lang/perl-html-parser package/perl-html-parser 
+    ls -lah bin/ar71xx/packages/packages/
 
 popd
