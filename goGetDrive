@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+mountpoint= /tmp/gdrive
+
+
+checkGo()
+{
+    type -p go >/dev/null 2>&1
+    if [[ $? -ne 0 ]]
+    then
+     echo "You don't have the Go language tool!"
+     exit -1
+    fi
+}
+
+checkGoVersion()
+{
+    local expectedMajorVersion='1.2'
+    local regex='.*?([0-9][.][0-9][.][0-9]).*?'
+    local goVersionString=$(go version)
+
+    if [[ $goVersionString =~ $regex ]]
+    then
+        local numericVersion="${BASH_REMATCH[1]}"
+        #echo $numericVersion
+        local chunkedToMajorVersion=$(echo $numericVersion | cut -d'.' -f1,2)
+        #echo $chunkedToMajorVersion
+
+        if [[ ! $(echo "$chunkedToMajorVersion >= $expectedMajorVersion" | bc) ]]
+        then
+            echo "Your Go version ${numericVersion} is older than $expectedMajorVersion!"
+            exit -3
+        else
+            echo "Your Go version ${numericVersion} seems fine, newer than $expectedMajorVersion!"
+        fi
+
+    else
+        echo "Failed to determine the version of your Go language tool!"
+        exit -2
+    fi
+}
+
+
+exportPathAndGetTheSource()
+{
+    mkdir -p /tmp/gopath
+    export GOPATH=/tmp/gopath
+    export PATH=$GOPATH/bin:$PATH
+    echo "Cloning DRIVE..."
+    go get -u github.com/odeke-em/drive/cmd/drive
+    echo "Cloning ready."
+}
+
+initDriveAndCheckStats()
+{
+    drive init $mountpoint
+    drive stat $mountpoint
+}
+
+#____________ MAIN ____________
+checkGo
+checkGoVersion
+exportPathAndGetTheSource
+initDriveAndCheckStats
