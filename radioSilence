@@ -1,0 +1,16 @@
+#!/bin/bash
+
+case "$1" in
+    on)
+        command="wifi down"
+    ;;
+    off)
+        command="wifi"
+    ;;
+    *)
+        echo "Usage: ${0##*/} {on|off}"
+        exit 1
+    ;;
+esac
+
+ssh root@router ${command} 
