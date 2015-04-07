@@ -1,0 +1,19 @@
+#!/bin/bash
+#source: https://slashbinbash.wordpress.com/2012/02/17/how-to-view-unsafe-9gag-com-images/
+
+#http://9gag.com/gag/[ID]
+#http://d24w6bsrhbeh9d.cloudfront.net/photo/[ID]_700b.jpg
+
+main()
+{
+    local regex="http://9gag.com/gag/(.*)"
+    if [[ $1 =~ $regex ]];
+    then
+        local ID="${BASH_REMATCH[1]}"
+        display "http://d24w6bsrhbeh9d.cloudfront.net/photo/${ID}_700b.jpg"
+    else
+        echo "error can't match $1"
+    fi
+}
+
+main $@
