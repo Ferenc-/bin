@@ -6,7 +6,7 @@
 
 main()
 {
-    local regex="http://9gag.com/gag/(.*)"
+    local regex='^http://9gag.com/gag/([^?]*)([?]sc=.*)?$'
     if [[ $1 =~ $regex ]];
     then
         local ID="${BASH_REMATCH[1]}"
