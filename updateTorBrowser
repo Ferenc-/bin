@@ -1,0 +1,58 @@
+#!/bin/bash
+
+BASE_URL='https://dist.torproject.org/torbrowser/'
+LATEST_VERSION=''
+TAR_FILE=''
+
+findLatestVersion()
+{
+    LATEST_VERSION=$(
+    wget -qO-  "${BASE_URL}" |\
+    while read line
+    do
+        if [[ ${line} =~ ([0-9][.][0-9][.][0-9]) ]]
+        then
+            echo "${BASH_REMATCH[1]}"
+        fi
+    done
+    )
+
+    [[ -z "${LATEST_VERSION}" ]] && \
+    { echo "ERROR: Failed to determine latest version"; exit 1; }
+}
+
+downloadLinux64Tar()
+{
+    echo "Group:${LATEST_VERSION}"
+    pushd /tmp
+        TAR_FILE="tor-browser-linux64-${LATEST_VERSION}_en-US.tar.xz"
+        wget "${BASE_URL}${LATEST_VERSION}/${TAR_FILE}"
+        [[ $? -eq 0 ]] || \
+        { echo "ERROR: Download failed! Exiting."; exit 2; }
+    popd
+}
+
+unpackTar()
+{
+    pushd /tmp
+        tar -xf "${TAR_FILE}"
+        [[ $? -eq 0 ]] || \
+        { echo "ERROR: Extraction of tar failed! Exiting."; exit 3; }
+    popd
+}
+
+replaceDirectory()
+{
+    rm -rf ~/tor-browser_en-US
+    mv /tmp/tor-browser_en-US ~/
+}
+
+main()
+{
+    findLatestVersion
+    downloadLinux64Tar
+    unpackTar
+    replaceDirectory
+}
+
+main
