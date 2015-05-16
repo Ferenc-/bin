@@ -14,11 +14,13 @@ findLatestVersion()
         then
             echo "${BASH_REMATCH[1]}"
         fi
-    done
+    done |\
+    tail -n 1
     )
 
     [[ -z "${LATEST_VERSION}" ]] && \
     { echo "ERROR: Failed to determine latest version"; exit 1; }
+    echo "Found latest version: ${LATEST_VERSION}"
 }
 
 downloadLinux64Tar()
