@@ -4,16 +4,47 @@
 #http://9gag.com/gag/[ID]
 #http://d24w6bsrhbeh9d.cloudfront.net/photo/[ID]_700b.jpg
 
-main()
+parseOptions()
 {
+    while getopts ":v" opt ${args};
+    do
+        case $opt in
+            v)
+                echo "Video has been triggered! (-v)" >&2
+                VIDEO="1"
+                args=${args[1]}
+                ;;
+            \?)
+                echo "Invalid option: -$OPTARG" >&2
+                exit -1
+                ;;
+        esac
+    done
+}
+
+displayContent()
+{
+    set ${args}
     local regex='^http://9gag.com/gag/([^?]*)([?]sc=.*)?$'
     if [[ $1 =~ $regex ]];
     then
         local ID="${BASH_REMATCH[1]}"
-        display "http://d24w6bsrhbeh9d.cloudfront.net/photo/${ID}_700b.jpg"
+        if [[ ! -z ${VIDEO} ]]
+        then
+            mpv "http://d24w6bsrhbeh9d.cloudfront.net/photo/${ID}_460svwm.webm"
+        else
+            display "http://d24w6bsrhbeh9d.cloudfront.net/photo/${ID}_700b.jpg"
+        fi
     else
         echo "error can't match $1"
     fi
 }
 
-main $@
+main()
+{
+    parseOptions
+    displayContent
+}
+
+args=($@)
+main 
