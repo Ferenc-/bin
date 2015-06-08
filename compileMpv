@@ -1,0 +1,48 @@
+#!/bin/bash
+
+## required by libgnutls-devel=> 
+#enca-devel fribidi-devel libass-devel libidn-devel libnettle-devel libtasn1-devel p11-kit-devel
+#libass-devel
+#fribidi-devel
+#libffmpeg-devel
+#
+#
+## required by libffmpeg-devel => 
+# alsa-devel celt dirac-devel frei0r-plugins-devel ladspa-devel libcdio++0 libcdio-devel libcdio-paranoia-devel libcelt-devel libdc1394 libdc1394-devel
+#  libdirac_decoder0 libffmpeg-devel libgsm-devel libjack-devel libmp3lame-devel libogg-devel liboil-devel libopencore-amr-devel libraw1394-devel
+#  librtmp-devel libtheora-devel libudf0 libva-devel libvdpau-devel libvorbis-devel libwebpdecoder1 libwebpdemux1 libwebp-devel libwebpmux1 libx264-devel
+#  libx265-59 libx265-devel libxvidcore-devel orc schroedinger-devel slang-devel speex-devel wayland-devel yasm
+
+MPV_COMP_DIR=/tmp/mpv
+ORIGNAL_DEVEL_PACKAGES=$(rpm -qa | grep devel)
+
+dependencies="
+fontconfig-devel    \
+freetype2-devel     \
+libgnutls-devel     \
+libass-devel        \
+fribidi-devel       \
+libffmpeg-devel     \
+libjpeg62-devel     \
+libbluray-devel     \
+libdvdread-devel    \
+libdvdnav-devel     \
+libbs2b-devel       \
+liblcms2-devel      \
+libguess-devel      \
+librubberband-devel \
+luajit-devel        \
+"
+
+
+
+mkdir -p $MPV_COMP_DIR 
+pushd $MPV_COMP_DIR 
+git clone https://github.com/mpv-player/mpv ./
+
+./bootstrap.py
+./waf configure --prefix=/home/ferenc/mpv/
+./waf build
+./waf install
+popd
+
