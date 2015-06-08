@@ -27,5 +27,5 @@ make
 checkReturnCode "Compilation Failed"
 
 # Run
-./bin/nvim
+build/bin/nvim
 checkReturnCode "Neovim exited unexpectedly"
