@@ -1,0 +1,10 @@
+#!/bin/bash
+
+ zypper in libevent-devel ncurses-devel
+
+
+source=https://github.com/tmux/tmux/archive/2.0.tar.gz
+rawPatch=https://gist.githubusercontent.com/choppsv1/dd00858d4f7f356ce2cf/raw/75b073e85f3d539ed24907f1615d9e0fa3e303f4/tmux-24.diff
+patch=https://gist.github.com/choppsv1/dd00858d4f7f356ce2cf
+
+patch -p1 < ../tmux-24.diff   
