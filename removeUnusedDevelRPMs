@@ -1,0 +1,2 @@
+#!/bin/bash
+sudo zypper rm $(rpm -qa | grep devel | grep -vE 'kernel|c++|glibc|boost|pthread|tbb')
