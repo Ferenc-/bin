@@ -1,8 +1,4 @@
 #!/bin/bash
-#source: https://slashbinbash.wordpress.com/2012/02/17/how-to-view-unsafe-9gag-com-images/
-
-#http://9gag.com/gag/[ID]
-#http://d24w6bsrhbeh9d.cloudfront.net/photo/[ID]_700b.jpg
 
 parseOptions()
 {
@@ -31,9 +27,9 @@ displayContent()
         local ID="${BASH_REMATCH[1]}"
         if [[ ! -z ${VIDEO} ]]
         then
-            mpv "http://d24w6bsrhbeh9d.cloudfront.net/photo/${ID}_460svwm.webm"
+            mpv "http://img-9gag-fun.9cache.com/photo/${ID}_460svwm.webm"
         else
-            display "http://d24w6bsrhbeh9d.cloudfront.net/photo/${ID}_700b.jpg"
+            display "http://img-9gag-fun.9cache.com/photo/${ID}_700b.jpg"
         fi
     else
         echo "error can't match $1"
