@@ -1,3 +1,35 @@
 #!/bin/bash
-sudo /etc/init.d/vboxdrv setup
-sudo vmware-modconfig --console --install-all
+
+compileVMwareDirect()
+{
+    cd /usr/lib/vmware/modules/source
+    tar -xf vmnet.tar
+    cd vmnet-only
+    make
+    cd ..
+    tar -xf vmmon.tar
+    cd vmmon-only
+    make
+    cd ..
+    cp vmmon.o /lib/modules/`uname -r`/misc/vmmon.ko
+    cp vmnet.o /lib/modules/`uname -r`/misc/vmnet.ko
+    depmod -a
+    /etc/init.d/vmware restart
+}
+
+compileVMware()
+{
+    vmware-modconfig --console --install-all
+}
+
+compileVirtualBox()
+{
+    /etc/init.d/vboxdrv setup
+}
+
+
+[[ ! "$1" =~ ^vmware|vmware-direct|virtualbox|all|$ ]] && echo -e "Usage:\n ${0##*/} <vmware|vmware-direct|virtualbox|all> " && exit -1
+[[ "vmware" == "$1" ]] && compileVMware
+[[ "vmware-direct" == "$1" ]] && compileVMwareDirect
+[[ "virtualbox" == "$1" ]] && compileVirtualBox
+[[ "all" == "$1" || "" == "$1" ]] && compileVirtualBox && compileVMware
