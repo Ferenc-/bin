@@ -8,4 +8,11 @@ pushd /tmp/
         make
         make install
     popd
+    git clone https://github.com/dubhater/vapoursynth-mvtools
+    pushd vapoursynth-mvtools
+        ./autogen.sh
+        ./configure --prefix=/home/ferenc/vapoursynth/
+        make
+        make install
+    popd
 popd
