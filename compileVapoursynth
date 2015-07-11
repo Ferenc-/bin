@@ -1,0 +1,11 @@
+#!/bin/bash
+
+pushd /tmp/
+    git clone https://github.com/vapoursynth/vapoursynth.git
+    pushd vapoursynth
+        ./autogen.sh
+        ./configure --prefix=/home/ferenc/vapoursynth
+        make
+        make install
+    popd
+popd
