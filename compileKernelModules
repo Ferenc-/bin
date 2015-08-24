@@ -28,8 +28,13 @@ compileVirtualBox()
 }
 
 
-[[ ! "$1" =~ ^vmware|vmware-direct|virtualbox|all|$ ]] && echo -e "Usage:\n ${0##*/} <vmware|vmware-direct|virtualbox|all> " && exit -1
+[[ ! "$1" =~ ^vmware|vmware-direct|virtualbox|all$ ]] 
+{   
+    echo -e "Usage:\n ${0##*/} <vmware|vmware-direct|virtualbox|all>" 
+    exit -1
+}
+
 [[ "vmware" == "$1" ]] && compileVMware
 [[ "vmware-direct" == "$1" ]] && compileVMwareDirect
 [[ "virtualbox" == "$1" ]] && compileVirtualBox
-[[ "all" == "$1" || "" == "$1" ]] && compileVirtualBox && compileVMware
+[[ "all" == "$1" ]] && compileVirtualBox && compileVMware
