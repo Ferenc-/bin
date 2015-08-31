@@ -28,7 +28,7 @@ compileVirtualBox()
 }
 
 
-[[ ! "$1" =~ ^vmware|vmware-direct|virtualbox|all$ ]] 
+[[ ! "$1" =~ ^vmware|vmware-direct|virtualbox|all$ ]] &&
 {   
     echo -e "Usage:\n ${0##*/} <vmware|vmware-direct|virtualbox|all>" 
     exit -1
