@@ -2,6 +2,10 @@
 
 compileVMwareDirect()
 {
+    local version=$(vmware --version | awk '{printf "%d", $3}')
+    local readonly targetDirectory=/lib/modules/`uname -r`/misc
+    [[ ! -d "${targetDirectory}" ]] && mkdir -p ${targetDirectory}
+
     cd /usr/lib/vmware/modules/source
     tar -xf vmnet.tar
     cd vmnet-only
@@ -10,9 +14,14 @@ compileVMwareDirect()
     tar -xf vmmon.tar
     cd vmmon-only
     make
-    cd ..
-    cp vmmon.o /lib/modules/`uname -r`/misc/vmmon.ko
-    cp vmnet.o /lib/modules/`uname -r`/misc/vmnet.ko
+    if [[ 12 > ${version} ]] 
+    then
+        cp ../vmmon.o ${targetDirectory}/vmmon.ko
+        cp ../vmnet.o ${targetDirectory}/vmnet.ko
+    else
+        cd ..
+        cp vmmon-only/vmmon.ko vmnet-only/vmnet.ko ${targetDirectory}/
+    fi
     depmod -a
     /etc/init.d/vmware restart
 }
