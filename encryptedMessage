@@ -1,0 +1,28 @@
+#!/bin/bash
+
+oldIFS="$IFS"
+IFS=$'\r\n'
+senders=($(gpg2 --list-secret-keys | awk -F ']' '/uid/ {print $2}'))
+recipients=($(gpg2 --list-keys | awk -F ']' '/uid/ {print $2}'))
+IFS=$oldIFS
+
+for i in $(seq 0 $((${#senders[@]}-1)) )
+do
+    echo "${i}:   ${senders[${i}]}"
+done
+
+read senderIndex
+
+for i in $(seq 0 $((${#recipients[@]}-1)) )
+do
+    echo "${i}:   ${recipients[${i}]}"
+done
+
+read recipientIndex
+
+
+TEMP=$(mktemp /tmp/message.XXXX)
+vim $TEMP
+gpg -ea -u "${senders[$senderIndex]}" -r "${recipients[$recipientIndex]}" ${TEMP}
+less -n ${TEMP}.asc
+
