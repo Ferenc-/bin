@@ -8,10 +8,12 @@ compileVMwareDirect()
     cd /usr/lib/vmware/modules/source
     tar -xf vmnet.tar
     cd vmnet-only
+    make clean
     make
     cd ..
     tar -xf vmmon.tar
     cd vmmon-only
+    make clean
     make
 
     # Normally the ko files can also be fetched from here:
