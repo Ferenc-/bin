@@ -2,7 +2,6 @@
 
 compileVMwareDirect()
 {
-    local version=$(vmware --version | awk '{printf "%d", $3}')
     local readonly targetDirectory=/lib/modules/`uname -r`/misc
     [[ ! -d "${targetDirectory}" ]] && mkdir -p ${targetDirectory}
 
@@ -14,14 +13,11 @@ compileVMwareDirect()
     tar -xf vmmon.tar
     cd vmmon-only
     make
-    if [[ 12 > ${version} ]] 
-    then
-        cp ../vmmon.o ${targetDirectory}/vmmon.ko
-        cp ../vmnet.o ${targetDirectory}/vmnet.ko
-    else
-        cd ..
-        cp vmmon-only/vmmon.ko vmnet-only/vmnet.ko ${targetDirectory}/
-    fi
+
+    # Normally the ko files can also be fetched from here:
+    # cp vmmon-only/vmmon.ko vmnet-only/vmnet.ko ${targetDirectory}/
+    cp ../vmmon.o ${targetDirectory}/vmmon.ko
+    cp ../vmnet.o ${targetDirectory}/vmnet.ko
     depmod -a
     /etc/init.d/vmware restart
 }
