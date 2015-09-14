@@ -2,7 +2,7 @@
 
 SYSLINUX_DIR=/tmp/syslinux
 SYSLINUX_URL_BASE=https://www.kernel.org/pub/linux/utils/boot/syslinux/6.xx/
-SYSLINUX_FILE=syslinux-6.02.tar.xz
+SYSLINUX_FILE=syslinux-6.03.tar.xz
 SYSLINUX_TAR=${SYSLINUX_FILE%.xz}
 SYSLINUX_SRC=${SYSLINUX_TAR%.tar}
 
