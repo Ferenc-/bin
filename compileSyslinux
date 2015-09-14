@@ -17,8 +17,7 @@ fi
 
 # Get syslinux:
 wget ${SYSLINUX_URL_BASE}/${SYSLINUX_FILE}
-unxz ${SYSLINUX_FILE}
-tar -xf ${SYSLINUX_TAR}
+tar -xf ${SYSLINUX_FILE}
 pushd ${SYSLINUX_SRC} 
 
 # See:
