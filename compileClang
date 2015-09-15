@@ -36,14 +36,14 @@ checkFreeSpace()
             local space="${BASH_REMATCH[1]}"
             if [[ "${gigsNeeded}" -gt "${space}" ]];
             then
-                echo "Error: Free space: ${space}G is less then the required ${gigsNeeded}G! Exiting."
+                echo "Error: Free space: ${space}G is less than the required ${gigsNeeded}G! Exiting."
                 exit -1
             else
                 echo "Free space: ${space}G. OK"
             fi 
         fi
     else
-        echo "Error: Less then 1G of free space! Exiting."
+        echo "Error: Less than 1G of free space! Exiting."
         exit -1
     fi
 }
