@@ -42,7 +42,8 @@ pushd $MPV_COMP_DIR
 git clone https://github.com/mpv-player/mpv ./
 
 ./bootstrap.py
-./waf configure --enable-vapoursynth --prefix=/home/ferenc/mpv/
+./waf configure --enable-vapoursynth --enable-xrandr --disable-pdf-build --disable-debug-build --disable-libsmbclient --prefix=/home/ferenc/mpv/
+#xrandr is questionable in case of vaapi output
 ./waf build
 ./waf install
 popd
