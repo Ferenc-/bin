@@ -1,10 +1,27 @@
 #!/bin/bash
 
- zypper in libevent-devel ncurses-devel
+# zypper in libevent-devel ncurses-devel
 
+releaseVersion='2.0'
+releaseTar="${releaseVersion}.tar.gz"
+releasesSource="https://github.com/tmux/tmux/archive/${releaseTar}"
 
-source=https://github.com/tmux/tmux/archive/2.0.tar.gz
-rawPatch=https://gist.githubusercontent.com/choppsv1/dd00858d4f7f356ce2cf/raw/75b073e85f3d539ed24907f1615d9e0fa3e303f4/tmux-24.diff
-patch=https://gist.github.com/choppsv1/dd00858d4f7f356ce2cf
+# 24-bit color patch:
+# patch='https://gist.github.com/choppsv1/dd00858d4f7f356ce2cf'
+rawPatch='https://gist.githubusercontent.com/choppsv1/dd00858d4f7f356ce2cf/raw/75b073e85f3d539ed24907f1615d9e0fa3e303f4/tmux-24.diff'
 
-patch -p1 < ../tmux-24.diff   
+TEMP=$(mktemp -d /tmp/tmux.XXXX)
+
+pushd ${TEMP}
+
+    wget ${releasesSource}
+    wget ${rawPatch}
+
+    tar -xf ${releaseTar}
+
+    pushd tmux-${releaseVersion}
+        patch -p1 < ../tmux-24.diff
+        sh autogen.sh
+        ./configure && make
+    popd
+popd
