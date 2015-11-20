@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+sudo ntpdate -s 0.hu.pool.ntp.org
