@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+versionString=$(VBoxManage --version)
+if [[ ! "0" == "$?" ]]
+then
+    echo "Couldn't determine VirtualBox version!"
+    exit -1
+fi
+
+if [[ ${versionString} =~ ^[0-9]+[.][0-9]+[.][0-9]+ ]]
+then
+    version=${BASH_REMATCH[0]}
+else
+    echo "Pattern matching failed on '${versionString}'!"
+    exit -1
+fi
+
+pushd /tmp
+    echo "Downloading ${version}"
+    wget http://download.virtualbox.org/virtualbox/${version}/Oracle_VM_VirtualBox_Extension_Pack-${version}.vbox-extpack   
+    sudo VBoxManage extpack install Oracle_VM_VirtualBox_Extension_Pack-${version}.vbox-extpack
+popd
+
