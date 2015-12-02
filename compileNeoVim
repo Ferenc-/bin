@@ -23,7 +23,7 @@ git clone git://github.com/neovim/neovim.git
 
 # Compile
 pushd ${NEOVIM_DIR}
-make VERBOSE=1 CMAKE_BUILD_TYPE=Release CMAKE_EXTRA_FLAGS=-DCMAKE_INSTALL_PREFIX=${INSTALL_DIR}
+make -j 8 VERBOSE=1 CMAKE_BUILD_TYPE=Release CMAKE_EXTRA_FLAGS=-DCMAKE_INSTALL_PREFIX=${INSTALL_DIR}
 checkReturnCode "Compilation Failed"
 make install
 checkReturnCode "Installation Failed"
