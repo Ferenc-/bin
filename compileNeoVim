@@ -2,7 +2,7 @@
 
 NEOVIM_DIR=/tmp/neovim
 LIB_DIR=~/neovim/usr/lib64/
-INSTALL_DIR=~/neovim/
+INSTALL_DIR=~/COMPILED/neovim/
 
 
 checkReturnCode()
