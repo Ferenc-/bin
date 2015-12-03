@@ -1,7 +1,7 @@
 #!/bin/bash
 
 NEOVIM_DIR=/tmp/neovim
-LIB_DIR=~/neovim/usr/lib64/
+LIB_DIR=~/COMPILED/neovim/usr/lib64/
 INSTALL_DIR=~/COMPILED/neovim/
 
 
