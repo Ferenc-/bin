@@ -1,0 +1,4 @@
+cmake -DCMAKE_INSTALL_PREFIX=~/COMPILED/Bear ../Bear
+make all
+make install
+make check
