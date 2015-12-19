@@ -1,0 +1,14 @@
+
+# https://github.com/i-rinat/freshplayerplugin/blob/master/doc/known-issues.md
+#
+# https://dl.google.com/dl/edgedl/chromeos/recovery/linux_recovery.sh
+#
+# https://dl.google.com/dl/edgedl/chromeos/recovery/recovery.conf
+
+
+https://dl.google.com/dl/edgedl/chromeos/recovery/chromeos_7390.68.0_zako_recovery_stable-channel_mp-v2.bin.zip
+
+# More info on madduck
+# http://madduck.net/blog/2006.10.20:loop-mounting-partitions-from-a-disk-image/
+gdisk -l chromeos_7390.68.0_zako_recovery_stable-channel_mp-v2.bin | awk /ROOT-A/ {print $2}
+mount -o loop,ro,offset=$((286720 * 512))  chromeos_7390.68.0_zako_recovery_stable-channel_mp-v2.bin /mnt/media/
