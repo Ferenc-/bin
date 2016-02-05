@@ -1,13 +1,13 @@
 #!/bin/bash
 
-## required by libgnutls-devel=> 
+## required by libgnutls-devel=>
 #enca-devel fribidi-devel libass-devel libidn-devel libnettle-devel libtasn1-devel p11-kit-devel
 #libass-devel
 #fribidi-devel
 #libffmpeg-devel
 #
 #
-## required by libffmpeg-devel => 
+## required by libffmpeg-devel =>
 # alsa-devel celt dirac-devel frei0r-plugins-devel ladspa-devel libcdio++0 libcdio-devel libcdio-paranoia-devel libcelt-devel libdc1394 libdc1394-devel
 #  libdirac_decoder0 libffmpeg-devel libgsm-devel libjack-devel libmp3lame-devel libogg-devel liboil-devel libopencore-amr-devel libraw1394-devel
 #  librtmp-devel libtheora-devel libudf0 libva-devel libvdpau-devel libvorbis-devel libwebpdecoder1 libwebpdemux1 libwebp-devel libwebpmux1 libx264-devel
@@ -22,7 +22,7 @@ freetype2-devel     \
 libgnutls-devel     \
 libass-devel        \
 fribidi-devel       \
-libffmpeg-devel     \
+ffmpeg-devel        \
 libjpeg62-devel     \
 libbluray-devel     \
 libdvdread-devel    \
@@ -34,15 +34,30 @@ librubberband-devel \
 luajit-devel        \
 "
 
-export LD_LIBRARY_PATH=~/ferenc/COMPILED/vapoursynth/lib64/:$LD_LIBRARY_PATH
-export PKG_CONFIG_PATH=~/ferenc/COMPILED/vapoursynth/lib64/pkgconfig/:$PKG_CONFIG_PATH
+for i in ${dependencies}
+do
+   result=$(rpm -q ${i})
+   if [[ "0" != "$?" ]]
+   then
+       echo "Unmet dependency: ${result}" && exit -1
+   else
+       echo -e "${result}\t\t\t\t OK"
+   fi
+done
 
-mkdir -p $MPV_COMP_DIR 
-pushd $MPV_COMP_DIR 
+
+
+export LD_LIBRARY_PATH=/home/ferenc/COMPILED/vapoursynth/lib64/:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/home/ferenc/COMPILED/zimg/lib64/:$LD_LIBRARY_PATH
+export PKG_CONFIG_PATH=/home/ferenc/COMPILED/vapoursynth/lib64/pkgconfig/:$PKG_CONFIG_PATH
+export PKG_CONFIG_PATH=/home/ferenc/COMPILED/zimg/lib64/pkgconfig/:$PKG_CONFIG_PATH
+
+mkdir -p $MPV_COMP_DIR
+pushd $MPV_COMP_DIR
 git clone https://github.com/mpv-player/mpv ./
 
 ./bootstrap.py
-./waf configure --enable-vapoursynth --enable-xrandr --disable-pdf-build --disable-debug-build --disable-libsmbclient --prefix=/home/ferenc/COMPILED/mpv/
+./waf configure --enable-vapoursynth --disable-rpi --enable-zsh-comp --enable-xrandr --disable-pdf-build --disable-debug-build --disable-libsmbclient --prefix=/home/ferenc/COMPILED/mpv/
 #xrandr is questionable in case of vaapi output
 ./waf build
 ./waf install
