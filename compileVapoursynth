@@ -1,17 +1,34 @@
 #!/bin/bash
 
+export PKG_CONFIG_PATH=~ferenc/COMPILED/zimg/lib64/pkgconfig/:$PKG_CONFIG_PATH
+
+rpm -q fftw3-devel
+if [[ "0" != "$?" ]]
+then
+    echo "No fftw3-devel"
+    exit -1
+fi
+
+
 pushd /tmp/
+#    git clone https://github.com/sekrit-twc/zimg
+#    pushd zimg
+#        ./autogen.sh
+#        ./configure --prefix=/home/ferenc/COMPILED/zimg
+#        make
+#        make install
+#    popd
     git clone https://github.com/vapoursynth/vapoursynth.git
     pushd vapoursynth
         ./autogen.sh
-        ./configure --prefix=/home/ferenc/vapoursynth
+        ./configure --prefix=/home/ferenc/COMPILED/vapoursynth
         make
         make install
     popd
     git clone https://github.com/dubhater/vapoursynth-mvtools
     pushd vapoursynth-mvtools
         ./autogen.sh
-        ./configure --prefix=/home/ferenc/vapoursynth/
+        ./configure --prefix=/home/ferenc/COMPILED/vapoursynth/
         make
         make install
     popd
