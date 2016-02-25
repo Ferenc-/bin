@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# http://www.mpcdf.mpg.de/services/network/secure-shell/ssh-tunnelling-port-forwarding
+ssh -4 -p 7778 -D 7777 -l efergcz localhost

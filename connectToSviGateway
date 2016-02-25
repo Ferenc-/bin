@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+ssh -4 -l efergcz -L 7778:www.r.eth.ericsson.se:22 svi.ericsson.se cat -
