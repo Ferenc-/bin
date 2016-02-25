@@ -1,4 +1,13 @@
-cmake -DCMAKE_INSTALL_PREFIX=~/COMPILED/Bear ../Bear
-make all
-make install
-make check
+#!/usr/bin/env bash
+pushd /tmp
+    git clone --depth 1 https://github.com/rizsotto/Bear.git
+    mkdir BearBuild
+    pushd BearBuild
+        cmake -DCMAKE_INSTALL_PREFIX=~/COMPILED/Bear ../Bear
+        make all
+        make install
+        make check
+    popd
+    rm -rf BearBuild
+    rm -rf Bear.git
+popd
