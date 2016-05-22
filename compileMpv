@@ -22,7 +22,6 @@ freetype2-devel     \
 libgnutls-devel     \
 libass-devel        \
 fribidi-devel       \
-ffmpeg-devel        \
 libjpeg62-devel     \
 libbluray-devel     \
 libdvdread-devel    \
