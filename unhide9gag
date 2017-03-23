@@ -22,14 +22,15 @@ displayContent()
 {
     set "${args}"
     local regex='^http://9gag.com/gag/([^?]*)([?]sc=.*)?$'
+    local base_url='http://d24w6bsrhbeh9d.cloudfront.net/photo'
     if [[ $1 =~ $regex ]];
     then
         local ID="${BASH_REMATCH[1]}"
         if [[ ! -z ${VIDEO} ]]
         then
-            mpv "http://img-9gag-fun.9cache.com/photo/${ID}_460svwm.webm"
+            mpv "${base_url}/${ID}_460svwm.webm"
         else
-            display "http://img-9gag-fun.9cache.com/photo/${ID}_700b.jpg"
+            wget -qO- "${base_url}/${ID}_700b.jpg" | display -
         fi
     else
         echo "error can't match $1"
