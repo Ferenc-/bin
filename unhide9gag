@@ -2,7 +2,7 @@
 
 parseOptions()
 {
-    while getopts ":v" opt ${args};
+    while getopts ":v" opt "${args}";
     do
         case $opt in
             v)
@@ -20,7 +20,7 @@ parseOptions()
 
 displayContent()
 {
-    set ${args}
+    set "${args}"
     local regex='^http://9gag.com/gag/([^?]*)([?]sc=.*)?$'
     if [[ $1 =~ $regex ]];
     then
@@ -43,4 +43,4 @@ main()
 }
 
 args=($@)
-main 
+main
