@@ -21,11 +21,11 @@ parseOptions()
 displayContent()
 {
     set "${args}"
-    local regex='^http://9gag.com/gag/([^?]*)([?]sc=.*)?$'
+    local regex='^http(s)?://9gag.com/gag/([^?]*)([?]sc=.*)?$'
     local base_url='http://d24w6bsrhbeh9d.cloudfront.net/photo'
     if [[ $1 =~ $regex ]];
     then
-        local ID="${BASH_REMATCH[1]}"
+        local ID="${BASH_REMATCH[2]}"
         if [[ ! -z ${VIDEO} ]]
         then
             mpv "${base_url}/${ID}_460svwm.webm"
