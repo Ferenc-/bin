@@ -35,12 +35,12 @@ luajit-devel        \
 
 for i in ${dependencies}
 do
-   result=$(rpm -q ${i})
+   result=$(rpm -q "${i}")
    if [[ "0" != "$?" ]]
    then
        echo "Unmet dependency: ${result}" && exit -1
    else
-       echo -e "${result}\t\t\t\t OK"
+       printf "%-40.40s %20s\n" "${result}" "OK"
    fi
 done
 
