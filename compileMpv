@@ -14,7 +14,7 @@
 #  libx265-59 libx265-devel libxvidcore-devel orc schroedinger-devel slang-devel speex-devel wayland-devel yasm
 
 MPV_COMP_DIR=/tmp/mpv
-ORIGNAL_DEVEL_PACKAGES=$(rpm -qa | grep devel)
+#ORIGNAL_DEVEL_PACKAGES=$(rpm -qa | grep devel)
 
 dependencies="
 fontconfig-devel    \
