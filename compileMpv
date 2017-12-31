@@ -65,8 +65,7 @@ else
 fi
 
 ./bootstrap.py
-./waf configure --enable-vapoursynth --disable-rpi --enable-zsh-comp --enable-xrandr --disable-pdf-build --disable-debug-build --disable-libsmbclient --prefix=/home/ferenc/COMPILED/mpv/
-#xrandr is questionable in case of vaapi output
+./waf configure --enable-vapoursynth --disable-rpi --enable-zsh-comp --disable-pdf-build --disable-debug-build --disable-libsmbclient --prefix=/home/ferenc/COMPILED/mpv/
 ./waf build
 ./waf install
 popd
