@@ -53,7 +53,16 @@ export PKG_CONFIG_PATH=/home/ferenc/COMPILED/zimg/lib64/pkgconfig/:$PKG_CONFIG_P
 
 mkdir -p $MPV_COMP_DIR
 pushd $MPV_COMP_DIR
-git clone https://github.com/mpv-player/mpv ./
+
+release=1
+if [[ "${release}" == "1" ]];
+then
+    wget -qO - https://github.com/mpv-player/mpv/archive/v0.27.0.tar.gz | tar xz
+    pushd mpv-0.27.0
+else
+    pushd mpv-0.27.0
+    git clone --depth 1 https://github.com/mpv-player/mpv ./
+fi
 
 ./bootstrap.py
 ./waf configure --enable-vapoursynth --disable-rpi --enable-zsh-comp --enable-xrandr --disable-pdf-build --disable-debug-build --disable-libsmbclient --prefix=/home/ferenc/COMPILED/mpv/
