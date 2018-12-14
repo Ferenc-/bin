@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+#kubectl "$@" | clide -e '/(Pending|ContainerCreating)/,fg=yellow,bold' \
+#                     -e '/(CrashLoopBackOff|Error)/,fg=red,bold' \
+#                     -e /Terminating/,fg=magenta,bold \
+#                     -e '/(Init|PodInitializing)/,fg=blue,bold' \
+#                     -e '/[ ][0][\/]\d{1,3}[ ]/,fg=red,bold' \
+#                     -e '/[ ][1-9]{1,3}[\/]\d{1,3}[ ]/,fg=green,bold'
+#[0][/]\d{1,3}
+
+kubectl "$@" | colorex --green '[ ](?P<ready>\d{1})[/](?P=ready)[ ]' \
+             | colorex --red   '[ ](?P<ready>\d{1})[/](?!(?P=ready))' \
+             | colorex --yellow '(Pending|ContainerCreating)' \
+             | colorex --red '(CrashLoopBackOff|Error|InvalidImageName|OOMKilled)' \
+             | colorex --magenta '(Terminating|Completed)' \
+             | colorex --blue '(Init|PodInitializing)'
