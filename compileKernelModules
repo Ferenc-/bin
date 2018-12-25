@@ -31,7 +31,11 @@ compileVMware()
 
 compileVirtualBox()
 {
-    /etc/init.d/vboxdrv setup
+    # As of 6.0.0 vboxdrv doesn't seem to be present anymore
+    # /etc/init.d/vboxdrv setup
+    # Use vboxconfig insstead:
+    /sbin/vboxconfig
+    
 }
 
 
