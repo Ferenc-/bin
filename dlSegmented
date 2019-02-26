@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# Source:
+# https://www.br.de/alphalernen/faecher/deutsch/audiovisuelle-texte-interpretation-kurzfilm-100.html
+
+# To be updated
+BASE_URL="https://br-i.akamaihd.net/i/MUJIuUOVBwQIbtC2uKJDM6OhuLnC_2rc571S/_-QS/9AgG9A4H/75a25e87-f61a-475d-b8f8-b3f5fc48d243_,0,A,B,E,C,.mp4.csmil"
+
+for j in {0..110};
+do
+    # This is a quality index, index 4 is the best quality
+    i=4
+    #for i in {0..4};
+    #do
+        wget "${BASE_URL}/segment${j}_${i}_av.ts?null=0"\
+            -O "segment${j}_${i}_av.ts";
+    #done;
+done
+
+# TODO: Handle this with 0 padded printf
+# for i in segment9_* ; do mv ${i} "segment09_$(echo ${i} | cut -d'_' -f2,3,4)"; done
+
+
+# https://stackoverflow.com/questions/7333232/how-to-concatenate-two-mp4-files-using-ffmpeg
+# https://stackoverflow.com/questions/38996925/ffmpeg-concat-unsafe-file-name
+for i in segment*_4_av.ts; do echo "file '${PWD}/${i}'" >> mylist2.txt; done
+ffmpeg -f concat -safe 0 -i mylist2.txt -f mpegts -c copy output3
