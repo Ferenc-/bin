@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 # https://learn.adafruit.com/circuitpython-on-any-computer-with-ft232h/linux
 
@@ -14,5 +15,6 @@ pip3 install https://codeload.github.com/eblot/pyftdi/tar.gz/v0.30.3 adafruit-bl
 pip3 install adafruit-circuitpython-htu21d
 
 export BLINKA_FT232H=1
-python3 -c 'from pyftdi.ftdi import Ftdi
-            Ftdi().open_from_url("ftdi:///?")'
+python3 -c 'from pyftdi.ftdi import Ftdi; Ftdi().open_from_url("ftdi:///?")' | grep 'Single RS232-HS'
+
+./readsensor.py
