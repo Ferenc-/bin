@@ -10,6 +10,8 @@ source /tmp/ft232h/bin/activate
 #pip3 install pyftdi adafruit-blinka
 pip3 install https://codeload.github.com/eblot/pyftdi/tar.gz/v0.30.3 adafruit-blinka
 
+# For the temperature / humidity sensor
+pip3 install adafruit-circuitpython-htu21d
 
 export BLINKA_FT232H=1
 python3 -c 'from pyftdi.ftdi import Ftdi
