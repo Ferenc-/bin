@@ -26,6 +26,10 @@ while True:
 sensor = HTU21D(i2c, sensor_i2c_address)
 
 while True:
-    print("\nTemperature: %0.1f C" % sensor.temperature)
-    print("Relative Humidity: %0.1f %%" % sensor.relative_humidity)
+    try:
+        print("\nTemperature: %0.1f C" % sensor.temperature)
+        print("Relative Humidity: %0.1f %%" % sensor.relative_humidity)
+    except ValueError as e:
+        print(f"Error while reading sensor: {e}\n")
     time.sleep(reading_frequency)
+
