@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Downloads
+Exec=nautilus-downloads
+Icon=folder-downloads
+Categories=Utility;
