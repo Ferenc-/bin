@@ -5,8 +5,14 @@
 
 # Download tvnjviewer from:
 # https://www.tightvnc.com/download/2.8.3/tvnjviewer-2.8.3-bin-gnugpl.zip
+if [ ! -f ./tightvnc-jviewer.jar ];
+then
+    wget -q 'https://www.tightvnc.com/download/2.8.3/tvnjviewer-2.8.3-bin-gnugpl.zip'
+    unzip -j "tvnjviewer-2.8.3-bin-gnugpl.zip" "nossh/tightvnc-jviewer.jar" -d ./
+    rm tvnjviewer-2.8.3-bin-gnugpl.zip
+fi
 
-java -jar ./tvnjviewer/tightvnc-jviewer.jar \
+java -jar ./tightvnc-jviewer.jar \
                 -vvv \
                 -host=192.168.1.171 \
                 -port=5900 \
