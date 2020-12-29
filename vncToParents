@@ -1,5 +1,5 @@
 #!/bin/bash
-export VNC_VIA_CMD='/usr/bin/ssh -2 -c aes128-cbc -x -p 2222 -l root -f -L %L:%H:%R %G sleep 20'
+export VNC_VIA_CMD='/usr/bin/ssh -2 -c aes128-ctr -x -p 2222 -l root -f -L %L:%H:%R %G sleep 20'
 
 [[ ! "$1" =~ ^mom|mom2|mom3|dad1|dad2|dad21$ ]] && echo -e "Usage:\n ${0##*/} mom|mom2|mom3|dad1|dad2|dad21" && exit -1
 [[ "mom" == "$1" ]] && HOST_AND_PORT=192.168.1.102:5900
