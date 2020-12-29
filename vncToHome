@@ -12,12 +12,16 @@ then
     rm tvnjviewer-2.8.3-bin-gnugpl.zip
 fi
 
+ssh -2 -c aes128-ctr -x -p 22 -l "$(<~/.private/AMT_FB_SSH_USER.vnc)" \
+    -f -L 5900:192.168.1.171:5900 "$(<~/.private/AMT_FB_SSH_HOST.vnc)" sleep 10
+
 java -jar ./tightvnc-jviewer.jar \
                 -vvv \
-                -host=192.168.1.171 \
+                -host=127.0.0.1 \
                 -port=5900 \
                 -password=$(<~/.private/AMT_FB_PASSWORD.vnc) \
-                -sshHost=$(<~/.private/AMT_FB_SSH_HOST.vnc) \
-                -sshUser=$(<~/.private/AMT_FB_SSH_USER.vnc) \
-                -sshPort=22 \
                 -showConnectionDialog=No
+                # -host=192.168.1.171 \
+                # -sshHost=$(<~/.private/AMT_FB_SSH_HOST.vnc) \
+                # -sshUser=$(<~/.private/AMT_FB_SSH_USER.vnc) \
+                # -sshPort=22 \
