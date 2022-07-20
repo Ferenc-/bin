@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+
+IFS= read -rsp 'PIN: ' PIN
+MODEM_ID=$(mmcli --list-modems | awk 'match($1, /Modem\/([0-9]+)/, a){ printf "%s", a[1]}')
+
+mmcli --sim="${MODEM_ID}" --pin="${PIN}"
+mmcli --modem="${MODEM_ID}" --enable
+mmcli --modem="${MODEM_ID}" --location-enable-gps-nmea
+mmcli --modem="${MODEM_ID}" --location-get
+mmcli --modem="${MODEM_ID}"
