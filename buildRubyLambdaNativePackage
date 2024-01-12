@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# From https://docs.aws.amazon.com/lambda/latest/dg/ruby-package.html
+
+# podman run --rm -it -v${PWD}:${PWD} -w${PWD} public.ecr.aws/sam/build-ruby3.2:latest-x86_64
+gem update bundler
+bundle config set --local path 'vendor/bundle' && bundle install
+zip -r my_deployment_package.zip lambda_function.rb vendor
+exit
+
