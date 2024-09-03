@@ -1,3 +1,2 @@
-#!/bin/bash
-export VIMRUNTIME=/tmp/neovim/neovim/runtime/
-/tmp/neovim/neovim/build/bin/nvim "$@"
+#!/usr/bin/env bash
+flatpak run --devel io.neovim.nvim "$@"
