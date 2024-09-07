@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+har_file="${1}'
+
+number_of_segments=$(jq '.log.entries | length' "${har_file}")
+mkdir parts
+
+for i in {000..471};
+do
+  short_i="$((10#$i))";
+  jq  -r ".log.entries[${short_i}].response.content.text"  > parts/p_${i}_base64.mpeg;
+done
+
+mkdir decoded
+for i in ./parts/*;
+do
+ echo "${i}"
+ base64 -d "${i}" > ./decoded/$(basename ${i}) ;
+done
+
+# Drop any file type that is ASCII or or other garbage, perhaps PNG?
+
+
+for i in {000..462}; do echo "file '${PWD}/decoded/p_${i}_base64.mpeg'" >> mylist.txt; done
+ffmpeg -f concat -safe 0 -i mylist.txt -c copy output.ts
