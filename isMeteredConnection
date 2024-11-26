@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# TODO:
+# Port to Python:
+# https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/blob/main/examples/python/gi/list-connections.py
+
+# https://networkmanager.dev/docs/libnm/latest/NMClient.html#nm-client-get-metered
+CONNECTION_UUID=$(nmcli -t -m multiline -f UUID connection show --active | head -n1 | cut -c 6- )
+
+METERED=$(nmcli -t -m multiline -f connection.metered connection show "$CONNECTION_UUID" | cut -c 20-)
+
+# possible values are "yes", "no", "unknown":
+echo "$METERED"
+
+# Or set with:
+# nmcli connection modify "${CONNECTION_UUID}" connection.metered no
+# or GUI https://askubuntu.com/a/1386003
