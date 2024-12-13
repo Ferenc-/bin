@@ -1,3 +1,0 @@
-#!/bin/bash
-sudo mount -t nfs -v -osoft fileserver:/backup/ /mnt/backup/
-sudo mount -t nfs -v -osoft fileserver:/home/ /mnt/home/
