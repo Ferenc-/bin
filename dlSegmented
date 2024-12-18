@@ -24,4 +24,8 @@ done
 # https://stackoverflow.com/questions/7333232/how-to-concatenate-two-mp4-files-using-ffmpeg
 # https://stackoverflow.com/questions/38996925/ffmpeg-concat-unsafe-file-name
 for i in segment*_4_av.ts; do echo "file '${PWD}/${i}'" >> mylist2.txt; done
+
+# Strongly consider downloading ffmpeg from
+# https://ffbinaries.com/downloads 
+# this includes everything that are missing from any other distribution.
 ffmpeg -f concat -safe 0  -analyzeduration 100M -probesize 100M  -i mylist2.txt -f mpegts -c copy output3
