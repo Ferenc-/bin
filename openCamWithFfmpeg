@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+ffmpeg -i /dev/video4 -f nut -c:v rawvideo - | ffplay -
