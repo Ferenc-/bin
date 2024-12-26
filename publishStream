@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+
+# RTSP over UDP is the most performant, only works if there is no NAT between server and client
+# https://github.com/bluenviron/mediamtx?tab=readme-ov-file#transport-protocols
+# and in practice it appears that it has to be E2E no NAT,
+# including all the containerization tech.
+# Hence we switch to TCP here
+
+podman run --rm -it --network=host -e RTSP_PROTOCOLS=tcp docker.io/bluenviron/mediamtx:latest
+
+podman run --rm -it --network=host --group-add keep-groups --device=/dev/video2 lscr.io/linuxserver/ffmpeg:latest -input_format mjpeg -i /dev/video2 -f rtsp -rtsp_transport tcp "rtsp://$(ip -4 address show dev enp1s0 | awk -F'[ /]' '/inet/{print $6}'):8554/mystream"
+
+
+flatpak run io.mpv.Mpv 'rtsp://mediamtx.server:8554/mystream'
+
