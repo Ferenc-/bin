@@ -1,2 +1,2 @@
 #!/bin/bash
-chromium --incognito --enable-devtools-experiments "$@" &
+flatpak run io.github.ungoogled_software.ungoogled_chromium --incognito --proxy-server="socks5://127.0.0.1:7777" "$@" &
