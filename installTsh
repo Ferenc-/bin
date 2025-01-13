@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# Download https://{TELEPORT_SERVER}/webapi/find after authentication
+VERSION=$(jq -r '.server_version' find.json)
+curl -O "https://cdn.teleport.dev/teleport-v${VERSION}-linux-amd64-bin.tar.gz"
+tar -xzf teleport-v${VERSION}-linux-amd64-bin.tar.gz
+cd teleport
+sudo ./install
