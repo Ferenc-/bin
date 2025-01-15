@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-flatpak run --devel io.neovim.nvim "$@"
+FLATPAK_ENABLE_SDK_EXT='*' flatpak run --devel io.neovim.nvim "$@"
