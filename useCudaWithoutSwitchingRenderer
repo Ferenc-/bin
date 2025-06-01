@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+
+# You can use CUDA without switching rendering to the Nvidia graphics. All you need to do is ensure that the Nvidia card is powered on before starting a CUDA application
+# https://wiki.archlinux.org/title/NVIDIA_Optimus#Use_CUDA_without_switching_the_rendering_provider
+
+
+# Kernel Open (nvidia-open vs nvidia)
+# Since the NVIDIA driver 515xx, there is a mean to use a full open source kernel space driver (userspace driver remains proprietary).
+# This is only relevant for Turing, Ampere and later (there is no chance for it to works with older GPU).
+# https://rpmfusion.org/Howto/NVIDIA
+
+# both nvidia and nvidia-open can support additional kernel modules:
+# * nvidiafb: framebuffer support
+# * nvidia_modeset: Kernel Mode Setting (KMS) support
+# * nvidia_uvm: Unified Virtual Memory (UVM) support
+# * nvidia_drm: Direct Rendering Management (DRM) support
+# https://www.baeldung.com/linux/nvidia-gpu-enable-disable
+
+# On newer GPUs blender will need the CUDA toolkit to compile, but:
+# Normally users do not need to install the CUDA toolkit as Blender comes with precompiled kernels.
+# https://docs.blender.org/manual/en/latest/render/cycles/gpu_rendering.html#cuda-error-kernel-compilation-failed
+# https://bbs.archlinux.org/viewtopic.php?id=283439
+
+
+# Gnome launches Wayland sessions by default, which are incompatible with optimus-manager. 
+# https://github.com/Askannz/optimus-manager/wiki/v1.3.1-README
+
+# A much lighter tool designed with simplicity in mind, it doesn't requires extensive config files or having a daemon running 24/7 on your system
+# as well as having to install a patched version of GDM if you're a Gnome use
+# https://github.com/bayasdev/envycontrol/wiki/Frequently-Asked-Questions#how-is-this-different-from-optimus-manager
+
+# Nvidia GPU is allways on. How to used integrated card by default? On Fedora 40 this worked like I expected.
+# https://universal-blue.discourse.group/t/nvidia-gpu-is-allways-on-how-to-used-integrated-card-by-default/3617
+
+# I also like to edit /etc/supergfxd.conf to make rebootless and loginless switching (seamless).
+# This is my currenct config. You might need to reboot the first time after editing it tho, or restart the service with systemctl restart supergfxd.
+# {
+# “mode”: “Integrated”,
+# “vfio_enable”: true,
+# “vfio_save”: false,
+# “always_reboot”: false,
+# “no_logind”: true,
+# “logout_timeout_s”: 60,
+# “hotplug_type”: “None”
+# }
+# https://universal-blue.discourse.group/t/recommended-way-to-have-integrated-intel-as-primary-gpu-and-nvidia-for-offloading/7545/3
+
+# In the meantime there is a GNOME Shell extension in ublue staging area:
+# https://github.com/ublue-os/packages/pull/46/files
+# https://extensions.gnome.org/extension/5344/supergfxctl-gex/
+
+
+
+# Nvidia optimus laptop
+# If you are using an nvidia image on an optimus laptop, run this after installation:
+# 
+# > ujust configure-nvidia-optimus
+
+# https://github.com/AB9IL/bluejay-hyprland?tab=readme-ov-file#nvidia-optimus-laptop
+# https://elis.nu/blog/2024/08/back-from-hyprland-to-sway/
+
+
+
+# https://github.com/ublue-os/packages/blob/45e1c9ad70077a28efd18a75b4d451e3779a4f00/packages/ublue-os-just/src/recipes/40-nvidia.just#L102
+
+# https://download.nvidia.com/XFree86/Linux-x86_64/545.29.06/README/dynamicpowermanagement.html
+
+# > echo "options nvidia NVreg_DynamicPowerManagement=0x02" >> /etc/modprobe.d/nvidia.conf
+
