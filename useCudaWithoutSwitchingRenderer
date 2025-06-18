@@ -9,6 +9,11 @@
 # This is only relevant for Turing, Ampere and later (there is no chance for it to works with older GPU).
 # https://rpmfusion.org/Howto/NVIDIA#Kernel_Open
 # https://negativo17.org/nvidia-proprietary-and-open-source-kernel-modules/
+# ublue OS also does as negativo17 suggests:
+# The nvidia-open flavored containers call `build-kmod-nvidia.sh kernel-open`
+# https://github.com/ublue-os/akmods/blob/1c5da5bf9fd1907cc47f5a439c12cbf9f1763d05/Containerfile.nvidia-open#L43C10-L43C30
+# which does the `sed -i -e 's/kernel$/kernel-open/g' /etc/nvidia/kernel.conf` before an `akmods` build of `nvidia` 
+# https://github.com/ublue-os/akmods/blob/1c5da5bf9fd1907cc47f5a439c12cbf9f1763d05/build_files/nvidia/build-kmod-nvidia.sh#L37
 
 # both nvidia and nvidia-open can support additional kernel modules:
 # * nvidiafb: framebuffer support
