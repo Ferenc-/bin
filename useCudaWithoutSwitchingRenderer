@@ -7,7 +7,8 @@
 # Kernel Open (nvidia-open vs nvidia)
 # Since the NVIDIA driver 515xx, there is a mean to use a full open source kernel space driver (userspace driver remains proprietary).
 # This is only relevant for Turing, Ampere and later (there is no chance for it to works with older GPU).
-# https://rpmfusion.org/Howto/NVIDIA
+# https://rpmfusion.org/Howto/NVIDIA#Kernel_Open
+# https://negativo17.org/nvidia-proprietary-and-open-source-kernel-modules/
 
 # both nvidia and nvidia-open can support additional kernel modules:
 # * nvidiafb: framebuffer support
