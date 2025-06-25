@@ -22,6 +22,12 @@
 # * nvidia_drm: Direct Rendering Management (DRM) support
 # https://www.baeldung.com/linux/nvidia-gpu-enable-disable
 
+# Important: both (nvidia-open vs nvidia) use the module name `nvidia`
+# To check which one is in use `modinfo nvidia | grep license`
+# If it returns `Dual MIT/GPL` then it is `nvidia-open`,
+# if it returns `NVIDIA`, then it is the proprietary `nvidia`.
+# See https://negativo17.org/nvidia-proprietary-and-open-source-kernel-modules/#akmods
+
 # On newer GPUs blender will need the CUDA toolkit to compile, but:
 # Normally users do not need to install the CUDA toolkit as Blender comes with precompiled kernels.
 # https://docs.blender.org/manual/en/latest/render/cycles/gpu_rendering.html#cuda-error-kernel-compilation-failed
