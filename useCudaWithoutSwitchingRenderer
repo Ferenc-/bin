@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Warning on laptops, the HDMI port, as well as any DP Alt Mode port that would be provided by docking stations,
+# are wired to the nvidia card. So you can't use an external display without the `nvidia_drm` or `noveau` module.
+
 # You can use CUDA without switching rendering to the Nvidia graphics. All you need to do is ensure that the Nvidia card is powered on before starting a CUDA application
 # https://wiki.archlinux.org/title/NVIDIA_Optimus#Use_CUDA_without_switching_the_rendering_provider
 
