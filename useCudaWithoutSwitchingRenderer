@@ -82,3 +82,12 @@
 
 # > echo "options nvidia NVreg_DynamicPowerManagement=0x02" >> /etc/modprobe.d/nvidia.conf
 
+# Suspend / Resume
+# Suspend & Resume might not work out of the box after installing packages.
+# Check if the output of `systemctl list-unit-files | grep nvidia`
+# The `nvidia-resume.service` & `nvidia-suspend.service` should both be `enabled - enabled`.
+# If not then:
+# sudo systemctl enable nvidia-suspend.service
+# sudo systemctl enable nvidia-resume.service
+# Also check the developments in this thread:
+# https://github.com/NVIDIA/open-gpu-kernel-modules/issues/472
