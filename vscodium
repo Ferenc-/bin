@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# Adapted from the instructions on:
+# https://github.com/OliverKeefe/vscode-extensions-in-vscodium?tab=readme-ov-file#extensions--marketplace
+CONFIG_DIR="${HOME}/.var/app/com.vscodium.codium/config/VSCodium"
+mkdir -p "${CONFIG_DIR}"
+echo '
+{
+  "extensionsGallery": {
+    "serviceUrl": "https://marketplace.visualstudio.com/_apis/public/gallery",
+    "cacheUrl": "https://vscode.blob.core.windows.net/gallery/index",
+    "itemUrl": "https://marketplace.visualstudio.com/items",
+    "controlUrl": "",
+    "recommendationsUrl": ""
+  }
+}' > "${CONFIG_DIR}/product.json"
+FLATPAK_ENABLE_SDK_EXT='*' flatpak run --devel com.vscodium.codium "$@"
