@@ -91,3 +91,11 @@
 # sudo systemctl enable nvidia-resume.service
 # Also check the developments in this thread:
 # https://github.com/NVIDIA/open-gpu-kernel-modules/issues/472
+
+# Test if cuda is working in a podman container:
+# podman run --rm --device=nvidia.com/gpu=all --security-opt=label=disable fedora nvidia-smi
+# See: 
+# https://developers.redhat.com/articles/2025/04/11/my-advice-selinux-container-labeling#6__run_container_with_selinux_separation_disabled_
+# also somewhat relevant, but much older posts are:
+# https://www.redhat.com/en/blog/podman-inside-container
+# https://www.redhat.com/en/blog/files-devices-podman
