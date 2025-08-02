@@ -1,0 +1,13 @@
+#!/usr/bin/bash
+# Also suggested on https://github.com/plougher/squashfs-tools/issues/263#issuecomment-1712588216
+# Run in an Ubuntu distrobox
+sudo apt install bsdiff
+git clone git@github.com:Freetz-NG/freetz-ng.git
+cd freetz-ng
+tools/prerequisites install -y
+make tools
+./tools/unsquashfs4-avm-be filesystem_core.squashfs -e lib/modules/dsp_vr9/
+cd ./squashfs-root/lib/modules/dsp_vr9/
+bspatch vr9-B-dsl.bin release-vr9-B-dsl.bin release-vr9-B-dsl.bin.bsdiff
+# Use this (after renaming) on modem:
+ls -lah release-vr9-B-dsl.bin
