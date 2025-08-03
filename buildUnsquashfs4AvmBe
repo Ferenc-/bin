@@ -8,6 +8,8 @@ tools/prerequisites install -y
 make tools
 ./tools/unsquashfs4-avm-be filesystem_core.squashfs -e lib/modules/dsp_vr9/
 cd ./squashfs-root/lib/modules/dsp_vr9/
+bspatch vr9-B-dsl.bin vr9-A-dsl.bin vr9-A-dsl.bin.bsdiff
+bspatch vr9-A-dsl.bin release-vr9-A-dsl.bin release-vr9-A-dsl.bin.bsdiff
+md5sum -c release-vr9-A-dsl.bin.md5sum
 bspatch vr9-B-dsl.bin release-vr9-B-dsl.bin release-vr9-B-dsl.bin.bsdiff
-# Use this (after renaming) on modem:
-ls -lah release-vr9-B-dsl.bin
+md5sum -c release-vr9-B-dsl.bin.md5sum
