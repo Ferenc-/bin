@@ -1,0 +1,18 @@
+#!/usr/bin/bash
+
+get_latest_version () {
+  LATEST_VERSION=$(curl -s https://api.github.com/repos/msm8916-mainline/lk2nd/releases | jq --raw-output0 '.[0].tag_name')
+}
+
+fetch () {
+  curl "https://github.com/msm8916-mainline/lk2nd/releases/download/${LATEST_VERSION}/lk2nd-msm8916.img"
+}
+
+flash () {
+  fastboot flash lk2nd lk2nd-msm8916.img
+}
+
+pushd /tmp
+get_latest_version
+fetch
+flash
