@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 get_latest_version () {
-  LATEST_VERSION=$(curl -s https://api.github.com/repos/msm8916-mainline/lk2nd/releases | jq --raw-output0 '.[0].tag_name')
+  LATEST_VERSION="$(curl -s https://api.github.com/repos/msm8916-mainline/lk2nd/releases | jq --raw-output '.[0].tag_name')"
 }
 
 fetch () {
