@@ -5,12 +5,26 @@ get_latest_version () {
 }
 
 fetch () {
-  curl "https://github.com/msm8916-mainline/lk2nd/releases/download/${LATEST_VERSION}/lk2nd-msm8916.img"
+  curl "https://github.com/msm8916-mainline/lk2nd/releases/download/${LATEST_VERSION}/lk2nd-${SOC_NAME}.img"
 }
 
 flash () {
-  fastboot flash lk2nd lk2nd-msm8916.img
+  fastboot flash lk2nd "lk2nd-${SOC_NAME}.img"
 }
+
+case "$1" in
+    a5|A5)
+        export SOC_NAME="msm8916"
+    ;;
+    s4minilte|S4miniLTE)
+        echo "${1} is currently unsupported"
+        exit 2
+    ;;
+    *)
+        echo "Usage: ${0##*/} [a5|A5|s4minilte|S4miniLTE]"
+        exit 1
+    ;;
+esac
 
 pushd /tmp
 get_latest_version
