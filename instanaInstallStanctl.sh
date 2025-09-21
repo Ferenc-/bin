@@ -14,3 +14,17 @@ wget -nv -O- --user=_ --password="$DOWNLOAD_KEY" https://artifact-public.instana
 
 apt update -y
 apt install -y stanctl
+
+sysctl vm.swappiness=0
+sysctl fs.inotify.max_user_instances=8192
+
+# Disable transparent hugepages
+echo never > /sys/kernel/mm/transparent_hugepage/enabled
+echo never > /sys/kernel/mm/transparent_hugepage/defrag
+
+mkfs.xfs /dev/vdb1
+mkfs.xfs /dev/vdc1
+
+mkdir -p /mnt/instana/stanctl/{objects,metrics,analytics,data}
+mount /dev/vdb1 /mnt/instana/stanctl/metrics
+mount /dev/vdc1 /mnt/instana/stanctl/analytics
