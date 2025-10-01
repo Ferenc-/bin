@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+OWNER_PASSWORD="${1}"
+USER_PASSWORD="${2}"
+INPUT_FILE="${3}"
+OUTPUT_FILE="${4}"
+
+qpdf --encrypt "${USER_PASSWORD}" "${OWNER_PASSWORD}" 256 -- "${INPUT_FILE}" "${OUTPUT_FILE}"
