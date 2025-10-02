@@ -1,0 +1,15 @@
+Firefox:
+
+# Setting needed by Google for enrolling
+security.webauth.u2f = true
+security.webauth.webauthn = true
+security.webauth.webauthn_enable_usbtoken = true
+
+# Setting needed by GitLab for login
+security.webauthn.enable_uv_preferred = true
+
+Chromium:
+# https://tuxcare.com/blog/passkeys-on-linux-breaking-free-from-platform-lock-in/
+# This is an old flag, but might still be needed:
+# Enable WebAuthn API
+chrome://flags/#enable-web-authentication-platform-api
