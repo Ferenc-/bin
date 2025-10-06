@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+# Start only on MIUI
+
+wget https://sourceforge.net/projects/crdroid/files/pipa/recovery/vendor_boot.img
+wget https://sourceforge.net/projects/crdroid/files/pipa/recovery/dtbo.img
+wget https://sourceforge.net/projects/crdroid/files/pipa/recovery/boot.img
+
+wget https://sourceforge.net/projects/crdroid/files/pipa/12.x/crDroidAndroid-16.0-20251008-pipa-v12.1.zip
+
+
+adb reboot bootloader
+
+# Wait for reboot
+fastboot flash boot boot.img
+fastboot flash dtbo dtbo.img
+fastboot flash vendor_boot vendor_boot.img
+
+fastboot reboot recovery
+
+# Wait for reboot
+# Format Data!
+# Apply update → Apply from ADB
+
+adb sideload crDroidAndroid-16.0-20251008-pipa-v12.1.zip
+# This will stuck at 47 % on the command line, which is normal!!!
+
+
+# Totally unnecessary
+# https://sourceforge.net/projects/nikgapps/files/Releases/Android-16/16-Jul-2025/NikGapps-core-arm64-16-20250716-signed.zip
