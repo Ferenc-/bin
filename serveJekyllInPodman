@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+podman run --rm -it -v"${PWD}:${PWD}":Z -w "${PWD}" --publish 4000:4000 --expose 4000 --entrypoint='bash' public.ecr.aws/docker/library/ruby:3.4.7-trixie <<<$"
+  bundler install
+  bundle exec jekyll serve --host 0.0.0.0 --port 4000
+"
