@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+
+kubectl create namespace restricted-namespace
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: restricted-namespace-user-1
+  namespace: restricted-namespace
+EOF
+
+cat <<EOF > restricted-namespace-user-1.csr.cnf
+[ req ]
+default_bits = 2048
+prompt = no
+default_md = sha256
+distinguished_name = dn
+[ dn ]
+CN = restricted-namespace-user-1
+O = restricted-namespace-full-admin
+EOF
+
+openssl genrsa -out restricted-namespace-user-1.key 2048
+openssl req -config restricted-namespace-user-1.csr.cnf -new -key restricted-namespace-user-1.key -out restricted-namespace-user-1.csr
+CSR=$(cat restricted-namespace-user-1.csr | base64 | tr -d '\n')
+
+cat <<EOF | kubectl apply -f -
+apiVersion: certificates.k8s.io/v1
+kind: CertificateSigningRequest
+metadata:
+  name: restricted-namespace-user-1
+spec:
+  request: ${CSR}
+  signerName: kubernetes.io/kube-apiserver-client
+  usages:
+  - client auth
+EOF
+
+kubectl certificate approve restricted-namespace-user-1
+kubectl get csr restricted-namespace-user-1 -o jsonpath='{.status.certificate}' | base64 --decode > restricted-namespace-user-1.crt
+
+kubectl config set-credentials restricted-namespace-user-1 --client-key=restricted-namespace-user-1.key --client-certificate=restricted-namespace-user-1.crt --embed-certs=true
+
+
+cat <<EOF | kubectl apply -f -
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: restricted-namespace-full-admin
+  namespace: restricted-namespace
+rules:
+- apiGroups: ["", "extensions", "apps"]
+  resources: ["*"]
+  verbs: ["*"]
+- apiGroups: ["batch"]
+  resources:
+  - jobs
+  - cronjobs
+  verbs: ["*"]
+EOF
+
+# 
+# cat <<EOF | kubectl apply -f -
+# kind: Role
+# apiVersion: rbac.authorization.k8s.io/v1
+# metadata:
+#   namespace: restricted-namespace
+#   name: restricted-namespace-deployment-admin
+# rules:
+# - apiGroups: ["", "extensions", "apps"]
+#   resources: ["deployments", "replicasets", "pods", "services", "ingresses"]
+#   verbs:  ["get", "list", "watch", "create", "update", "patch", "delete"]
+# EOF
+
+cat <<EOF | kubectl apply -f -
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: admin-view
+  namespace: restricted-namespace
+subjects:
+- kind: ServiceAccount
+  name: restricted-namespace-user-1
+  namespace: restricted-namespace
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: restricted-namespace-full-admin
+EOF
+
+
