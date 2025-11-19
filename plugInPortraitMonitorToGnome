@@ -1,0 +1,1 @@
+gnome-monitor-config set -Lp -M HDMI-1 -t left
