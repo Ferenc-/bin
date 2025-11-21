@@ -11,7 +11,7 @@ EOF
 
 cat <<EOF > restricted-namespace-user-1.csr.cnf
 [ req ]
-default_bits = 2048
+default_bits = 4096
 prompt = no
 default_md = sha256
 distinguished_name = dn
@@ -20,7 +20,7 @@ CN = restricted-namespace-user-1
 O = restricted-namespace-full-admin
 EOF
 
-openssl genrsa -out restricted-namespace-user-1.key 2048
+openssl genrsa -out restricted-namespace-user-1.key 4096
 openssl req -config restricted-namespace-user-1.csr.cnf -new -key restricted-namespace-user-1.key -out restricted-namespace-user-1.csr
 CSR=$(cat restricted-namespace-user-1.csr | base64 | tr -d '\n')
 
@@ -39,8 +39,16 @@ EOF
 kubectl certificate approve restricted-namespace-user-1
 kubectl get csr restricted-namespace-user-1 -o jsonpath='{.status.certificate}' | base64 --decode > restricted-namespace-user-1.crt
 
-kubectl config set-credentials restricted-namespace-user-1 --client-key=restricted-namespace-user-1.key --client-certificate=restricted-namespace-user-1.crt --embed-certs=true
+# Sanity check here:
+if ! diff <(openssl rsa -noout -modulus -in restricted-namespace-user-1.key | openssl md5) <(openssl x509 -noout -modulus -in restricted-namespace-user-1.crt | openssl md5); then
+  echo "!!!!!!!!!!!!!!!!!!!! ERROR !!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  echo "The public and private key modulus don't match!"
+  echo "You would get 'error: tls: private key does not match public key'"
+  echo "if you tried using these for authentication."
+  exit 1
+fi
 
+kubectl config set-credentials restricted-namespace-user-1 --client-key=restricted-namespace-user-1.key --client-certificate=restricted-namespace-user-1.crt --embed-certs=true
 
 cat <<EOF | kubectl apply -f -
 kind: Role
