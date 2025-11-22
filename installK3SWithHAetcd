@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+SECRET_TOKEN="SECRET-T-12345"
+
+curl -sfL https://get.k3s.io | K3S_TOKEN="${SECRET_TOKEN}" sh -s - server --cluster-init --etcd-expose-metrics=true
+curl -sfL https://get.k3s.io | K3S_TOKEN="${SECRET_TOKEN}" sh -s - server --server https://node1.XYZ.com:6443 --etcd-expose-metrics=true
+curl -sfL https://get.k3s.io | K3S_TOKEN="${SECRET_TOKEN}" sh -s - server --server https://node1.XYZ.com:6443 --etcd-expose-metrics=true
+
+# Any value in
+# --tls-san=<FIXED_IP> # Optional, needed if using a fixed registration address
