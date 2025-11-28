@@ -48,7 +48,7 @@ metadata:
   name: restricted-namespace-full-admin
   namespace: restricted-namespace
 rules:
-- apiGroups: ["", "extensions", "apps"]
+- apiGroups: ["", "extensions", "apps", "rbac.authorization.k8s.io"]
   resources: ["*"]
   verbs: ["*"]
 - apiGroups: ["batch"]
