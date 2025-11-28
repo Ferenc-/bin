@@ -1,14 +1,5 @@
 #!/usr/bin/env bash
 
-kubectl create namespace restricted-namespace
-cat <<EOF | kubectl apply -f -
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: restricted-namespace-user-1
-  namespace: restricted-namespace
-EOF
-
 cat <<EOF > restricted-namespace-user-1.csr.cnf
 [ req ]
 default_bits = 4096
@@ -87,7 +78,7 @@ metadata:
   name: admin-view
   namespace: restricted-namespace
 subjects:
-- kind: ServiceAccount
+- kind: User
   name: restricted-namespace-user-1
   namespace: restricted-namespace
 roleRef:
