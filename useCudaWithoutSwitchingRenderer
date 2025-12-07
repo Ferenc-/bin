@@ -18,7 +18,10 @@
 # which does the `sed -i -e 's/kernel$/kernel-open/g' /etc/nvidia/kernel.conf` before an `akmods` build of `nvidia` 
 # https://github.com/ublue-os/akmods/blob/1c5da5bf9fd1907cc47f5a439c12cbf9f1763d05/build_files/nvidia/build-kmod-nvidia.sh#L37
 # !!!! NOTE !!! The `/etc/nvidia/kernel.conf` doesn't exist on a minimal FC 43 install anymore, so don't get surprised if you don't find it.
-# You can do just do a `sudo akmods --force --kmod "nvidia"` on FC43. 
+# You can do just do a `sudo akmods --force --kmod "nvidia"` on FC43.
+# Keep in mind that as of `akmod-nvidia` `3:590.44.01-1.fc43`,
+# the module needs a C++ compiler, but that dependency is somehow missing from the RPM,
+# so you have to ensure it for yourself that it is available.
 
 # both nvidia and nvidia-open can support additional kernel modules:
 # * nvidiafb: framebuffer support
