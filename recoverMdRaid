@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+sudo mdadm -D /dev/md0
+# check for 'State : clean, degraded'
+# If yes, then add missing e.g:
+sudo mdadm --manage /dev/md0 -a /dev/sda1
+# check for 'State : clean, degraded, recovering'
+# keep watching until 'spare rebuilding' is done
+# Progress is in 'Rebuild Status : 25% complete'
