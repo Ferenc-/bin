@@ -33,5 +33,9 @@ ffmpeg -f concat -safe 0  -analyzeduration 100M -probesize 100M  -i mylist2.txt 
 # Convert to iPad format with:
 ffmpeg -i FullVideo.mp2ts -c:a aac -cutoff 15000 -ab 128k -ar 44100 -ac 1 -strict -2 -async 1 -c:v copy -b:v 1024k -maxrate 2048k -bufsize 2048k -r 23.81 -pix_fmt yuv420p -movflags faststart -level 13 -partitions partb8x8+partp4x4+partp8x8+parti8x8 -b-pyramid 1 -weightb 0 -8x8dct 0 -fast-pskip 1 -trellis 1 -me_method hex -flags +loop -sws_flags fast_bilinear -direct-pred 1 -sc_threshold 40  -sn -y FullVideo.mp4
 
+# Convert with NVidia acceleartion
+# https://docs.nvidia.com/video-technologies/video-codec-sdk/12.0/ffmpeg-with-nvidia-gpu/index.html#hwaccel-transcode-without-scaling
+ffmpeg -y -vsync 0 -hwaccel cuda -hwaccel_output_format cuda  -i input.mp4 -c:v h264_nvenc -b:v 5M -c:a copy output.mp4
+
 # Use delogo filter:
 ffmpeg -i input.mp4 -vf "delogo=x=1539:y=23:w=353:h=93:enable='between(t,5,10)'" -c:a copy output.mp4
