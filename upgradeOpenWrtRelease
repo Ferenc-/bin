@@ -1,0 +1,34 @@
+#!/usr/bin/env ash
+RELEASE=$(wget -qO- https://downloads.openwrt.org/.versions.json | awk -F '"' '/"stable_version"/{print $4}')
+MODEL=$(cat /tmp/sysinfo/model)
+
+case "$MODEL" in
+  'Zyxel NWA50AX Pro')
+    export SYSUPGRADE_IMAGE_NAME="openwrt-${RELEASE}-mediatek-filogic-zyxel_nwa50ax-pro-squashfs-sysupgrade.bin"
+    export TARGET_PREFIX="mediatek/filogic"
+  ;;
+  'XikeStor SKS8300-8X')
+    export SYSUPGRADE_IMAGE_NAME="openwrt-${RELEASE}-realtek-rtl930x-xikestor_sks8310-8x-squashfs-sysupgrade.bin"
+    export TARGET_PREFIX="realtek/rtl930x"
+  ;;
+  'AVM FRITZ!Box 7530')
+    export SYSUPGRADE_IMAGE_NAME="openwrt-${RELEASE}-ipq40xx-generic-avm_fritzbox-7530-squashfs-sysupgrade.bin"
+    export TARGET_PREFIX="ipq40xx/generic"
+  ;;
+  *)
+    echo "${MODEL} is currently unsupported"
+    exit 1
+  ;;
+esac
+
+export SYSUPGRADE_IMAGE_URL="https://downloads.openwrt.org/releases/${RELEASE}/targets/${TARGET_PREFIX}/${SYSUPGRADE_IMAGE_NAME}"
+export CHECKSUMS_URL="https://downloads.openwrt.org/releases/${RELEASE}/targets/${TARGET_PREFIX}/sha256sums"
+pushd /tmp
+wget "${SYSUPGRADE_IMAGE_URL}"
+wget -qO- "${CHECKSUMS_URL}" | grep "${SYSUPGRADE_IMAGE_NAME}" | tr -d '*' > sha256sum_filtered
+if sha256sum -c sha256sum_filtered; then
+  echo "Hash Check Successful!"
+  echo "Starting Sysupgrade:"
+  echo ""
+  sysupgrade -v "${SYSUPGRADE_IMAGE_NAME}"
+fi
