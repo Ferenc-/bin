@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+if test -f /sbin/sshd && /sbin/sshd -V 2>&1 | grep -q OpenSSH; then
+  # OpenSSH
+  # See https://www.openssh.org/pq.html
+  # Since release 9.0 (April 2022), the `sntrup761x25519-sha512` is available.
+  # Since 10.0 the new default is `mlkem768x25519-sha256`, this second one is preferred.
+  echo "Detected OpenSSH"
+  RESULT=$(sudo sshd -T | awk '/^kexalgorithms/{ print $2}')
+elif which dropbear 2>&1; then
+  echo "Detected Dropbear"
+  echo "ERROR: Dropbear doesn't support runtime configuration of allowed kexalgorithms!"
+  echo "You can configure that in compile time or switch to OpenSSH."
+  exit -1
+else
+  echo "ERROR: Couldn't find any supported SSH server."
+  exit -2
+fi
+
+case "${RESULT}" in
+  mlkem768x25519-sha256)
+    echo "Excellent! Found ${RESULT} ONLY, this is the most secure!"
+  ;;
+  *mlkem768x25519-sha256*)
+    echo "Good! Found ${RESULT}. But consider removing the rest ASAP!"
+  ;;
+  sntrup761x25519-sha512)
+    echo "Good enough! Found ${RESULT} ONLY, which is good enough for now. Consider upgrading when possible!"
+  ;;
+  *sntrup761x25519-sha512*)
+    echo "Good enough! Found ${RESULT}. Consider upgrading when possible & removing non-PQ options!"
+  ;;
+  *)
+    echo "Warning! Found ${RESULT}, upgrade ASAP!"
+  ;;
+esac
