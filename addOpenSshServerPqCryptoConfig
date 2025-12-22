@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+CONF_FILE='/etc/ssh/sshd_config.d/0-post-quantum.conf'
+sudo touch "${CONF_FILE}"
+sudo chmod 600 "${CONF_FILE}"
+sudo echo '# ONLY Allow post-quantum key exchange algorithms' > "${CONF_FILE}"
+sudo echo 'KexAlgorithms mlkem768x25519-sha256' >> "${CONF_FILE}"
