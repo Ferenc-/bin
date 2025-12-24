@@ -6,7 +6,7 @@ case "${RESULT}" in
   mlkem768x25519-sha256)
     echo "Excellent! Found ${RESULT}, this is the most secure!"
   ;;
-  sntrup761x25519-sha512)
+  sntrup761x25519-sha512 | sntrup761x25519-sha512@openssh.com)
     echo "Good enough! Found ${RESULT}, which is good enough for now. Consider upgrading when possible!"
   ;;
   *)
