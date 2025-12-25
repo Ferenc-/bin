@@ -7,3 +7,4 @@ sudo mdadm --manage /dev/md0 -a /dev/sda1
 # check for 'State : clean, degraded, recovering'
 # keep watching until 'spare rebuilding' is done
 # Progress is in 'Rebuild Status : 25% complete'
+# Finally the 'State : clean' should be reached
