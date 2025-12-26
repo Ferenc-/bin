@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+VERSION='v1alpha2'
+
+if [ "${VERSION}" = 'v1alpha1' ]; then
+YAML_FILES=(
+  https://raw.githubusercontent.com/kubernetes-sigs/network-policy-api/refs/heads/release-0.1/config/crd/standard/policy.networking.k8s.io_adminnetworkpolicies.yaml
+  https://raw.githubusercontent.com/kubernetes-sigs/network-policy-api/refs/heads/release-0.1/config/crd/standard/policy.networking.k8s.io_baselineadminnetworkpolicies.yaml
+  https://raw.githubusercontent.com/kubernetes-sigs/kube-network-policies/refs/tags/v1.0.0/install-anp.yaml
+)
+
+for yaml_file in "${YAML_FILES[@]}"; do
+  kubectl apply -f "${yaml_file}"
+done
+
+kubectl create -f - <<<$'
+  apiVersion: policy.networking.k8s.io/v1alpha1
+  kind: AdminNetworkPolicy
+  metadata:
+    name: allow-all
+  spec:
+    priority: 1000
+    subject:
+      namespaces: {}
+'
+
+elif [ "${VERSION}" = 'v1alpha2' ]; then
+
+YAML_FILES=(
+  https://raw.githubusercontent.com/kubernetes-sigs/network-policy-api/399040aaf83d6516379bb259a55cbad0c4a70d17/config/crd/standard/policy.networking.k8s.io_clusternetworkpolicies.yaml
+  https://raw.githubusercontent.com/kubernetes-sigs/kube-network-policies/refs/tags/v1.0.0/install-cnp.yaml
+)
+
+for yaml_file in "${YAML_FILES[@]}"; do
+  kubectl apply -f "${yaml_file}"
+done
+
+kubectl create -f - <<<$'
+  apiVersion: policy.networking.k8s.io/v1alpha2
+  kind: ClusterNetworkPolicy
+  metadata:
+    name: allow-all
+  spec:
+    priority: 1000
+    tier: "Admin"
+    subject:
+      namespaces: {}
+'
+
+fi
