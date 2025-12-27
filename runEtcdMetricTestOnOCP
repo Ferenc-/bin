@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+kubectl get -n openshift-etcd cm etcd-metrics-ca-bundle -o jsonpath='{.data.ca-bundle\.crt}' > ca-bundle.crt
+kubectl get -n openshift-etcd secret etcd-metric-client -o jsonpath='{.data.tls\.crt}' | base64 -d - > tls.crt
+kubectl get -n openshift-etcd secret etcd-metric-client -o jsonpath='{.data.tls\.key}' | base64 -d - > tls.key
+kubectl apply -f - <<<$'
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: etcd-debug
+  name: etcd-debug
+spec:
+  containers:
+  - command:
+    - "/bin/sh"
+    - "-c"
+    - "sleep inf"
+    image: quay.io/curl/curl
+    name: etcd-debug
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+'
+
+sleep 5
+
+for f in ca-bundle.crt tls.crt tls.key; do
+  kubectl cp "${f}" etcd-debug:/home/curl_user/
+done
+
+kubectl exec -i etcd-debug -- sh <<<$'curl --cacert ca-bundle.crt  --cert tls.crt --key tls.key --silent https://etcd.openshift-etcd.svc.cluster.local:9979/metrics | head'
