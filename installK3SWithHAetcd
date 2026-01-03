@@ -8,3 +8,6 @@ curl -sfL https://get.k3s.io | K3S_TOKEN="${SECRET_TOKEN}" sh -s - server --serv
 
 # Any value in
 # --tls-san=<FIXED_IP> # Optional, needed if using a fixed registration address
+#
+# Test with:
+# curl -sL http://localhost:2381/metrics | awk '/etcd_server_is_leader/ || /etcd_server_leader_changes_seen_total/'
