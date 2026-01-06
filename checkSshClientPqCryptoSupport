@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+RESULT=$(ssh -Q kex | tr '\n' ' ')
+
+
+case "${RESULT}" in
+  *mlkem768x25519-sha256*)
+    echo "Excellent! Found mlkem768x25519-sha256, this is the most secure!"
+  ;;
+  *sntrup761x25519-sha512*)
+    echo "Good enough! Found sntrup761x25519-sha512, which is good enough for now. Consider upgrading when possible!"
+  ;;
+  *)
+    echo "Warning! Couldn't find any PQ Kex algorithm. Upgrade ASAP!"
+  ;;
+esac
