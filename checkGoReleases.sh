@@ -4,4 +4,6 @@ LATEST=$(curl -s https://go.dev/VERSION?m=text | head -1 | sed 's/go//')
 
 if [ "${CURRENT}" != "${LATEST}" ]; then
     echo -e "\033[31mNew Go version available: ${LATEST} (current: ${CURRENT})\033[0m"
+else
+    echo -e "\033[32mGo version is already the latest ${LATEST}\033[0m"
 fi
