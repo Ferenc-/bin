@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+for i in gcr-ssh-agent.socket ssh-agent.socket gcr-ssh-agent.service ssh-agent.service; do
+  systemctl --user status "${i}"
+  case "${?}" in
+    0) echo -e "\033[31mNOK! This should be disabled!\033[0m\n" && exit -1;;
+    3) echo -e "\033[32mOK! Properly disabled.\033[0m\n";;
+    4) echo -e "\033[33mOK-ish: This unit doesn't exist. Anything else insted?\033[0m\n";;
+  esac
+done
+
+if ssh-add -l 2>&1 | grep 'Connection refused'; then
+    echo -e "\033[32mOK! Refuses connection as expected.\033[0m\n"
+else
+    echo -e "\033[31mNOK! This should not connect!\033[0m\n" && exit -1
+fi
+
