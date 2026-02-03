@@ -14,6 +14,12 @@ golang() {
   LATEST="$(curl -s https://go.dev/VERSION?m=text | head -1 | sed 's/go//')"
 }
 
+kubernetes() {
+  NAME="Kubernetes"
+  CURRENT='1.35.1'
+  LATEST="$(curl -s https://dl.k8s.io/release/stable.txt | sed 's/v//')"
+}
+
 openwrt() {
   NAME='OpenWrt'
   CURRENT='24.10.5'
@@ -26,7 +32,7 @@ postamrketos() {
   LATEST="$(wget -qO- 'https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/master/channels.cfg?ref_type=heads&inline=false' | awk 'match($0, /[[]v([0-9]{2}[.][0-9]{2})[]]/, arr) {printf "%s", arr[1]; exit}')"
 }
 
-for i in golang openwrt postamrketos; do
+for i in golang kubernetes openwrt postamrketos; do
     ${i}
     check
 done
