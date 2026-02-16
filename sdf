@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+awk '!/^#/ {print $2}' /etc/fstab | xargs df --human-readable --output='target,fstype,size,pcent'
