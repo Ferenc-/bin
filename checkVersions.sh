@@ -8,6 +8,22 @@ check() {
   fi
 }
 
+freedesktopsdk() {
+  NAME="Freedesktop SDK"
+  CURRENT='25.08'
+  LATEST="$(curl --silent https://gitlab.com/api/v4/projects/4339844/releases \
+            | jq --raw-output '[
+                                 .[]
+                                 | select(.tag_name | contains("rc") | not) 
+                                 | .tag_name 
+                                 | sub("freedesktop-sdk-";"")
+                                 | sub(".[0-9]+$";"")
+                               ]
+                               | sort
+                               | reverse 
+                               | .[0]')"
+}
+
 golang() {
   NAME="Golang"
   CURRENT='1.26.0'
@@ -32,7 +48,7 @@ postamrketos() {
   LATEST="$(wget -qO- 'https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/master/channels.cfg?ref_type=heads&inline=false' | awk 'match($0, /[[]v([0-9]{2}[.][0-9]{2})[]]/, arr) {printf "%s", arr[1]; exit}')"
 }
 
-for i in golang kubernetes openwrt postamrketos; do
+for i in freedesktopsdk golang kubernetes openwrt postamrketos; do
     ${i}
     check
 done
