@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 BEARER_TOKEN=$(<~/.private/JIRA_TOKEN)
 
-JQL_QUERY='assignee=currentUser()+AND+status+IN+("QA",+"In+Development")'
+JQL_QUERY='assignee=currentUser()+AND+status+IN+("QA",+"In+Development",+"In+Progress")'
 JQ_FILTER='.issues[] | .fields.status.name, .key, .fields.summary'
 
 curl X GET \
