@@ -23,7 +23,7 @@ esac
 
 export SYSUPGRADE_IMAGE_URL="https://downloads.openwrt.org/releases/${RELEASE}/targets/${TARGET_PREFIX}/${SYSUPGRADE_IMAGE_NAME}"
 export CHECKSUMS_URL="https://downloads.openwrt.org/releases/${RELEASE}/targets/${TARGET_PREFIX}/sha256sums"
-pushd /tmp
+cd /tmp
 wget "${SYSUPGRADE_IMAGE_URL}"
 wget -qO- "${CHECKSUMS_URL}" | grep "${SYSUPGRADE_IMAGE_NAME}" | tr -d '*' > sha256sum_filtered
 if sha256sum -c sha256sum_filtered; then
