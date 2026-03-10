@@ -38,7 +38,7 @@ kubernetes() {
 
 openwrt() {
   NAME='OpenWrt'
-  CURRENT='25.12.0'
+  CURRENT='25.12.1'
   LATEST="$(wget -qO- https://downloads.openwrt.org/.versions.json | awk -F '"' '/"stable_version"/{print $4}')"
 }
 
