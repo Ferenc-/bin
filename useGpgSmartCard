@@ -1,0 +1,11 @@
+#!/bin/bash
+
+while ! pcsc_scan -t 1; do
+  echo "No smart card reader detected! Make sure to connect it!"
+done
+
+while ! gpg --card-status; do
+  echo "GPG doesn't see the card reader yet. Restarting needed services."
+  sudo systemctl restart pcscd.service
+done
+
