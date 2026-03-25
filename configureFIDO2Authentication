@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+sudo touch /etc/u2f_mappings
+sudo chmod 600  /etc/u2f_mappings
+ pamu2fcfg --pin-verification --username="${USER}" | tee /etc/u2f_mappings
+
+for i in /etc/pam.d/login /etc/pam.d/sudo; do
+echo '
+#%PAM-1.0                                                                                                                                                                              [0/165]
+auth       sufficient   pam_u2f.so authfile=/etc/u2f_mappings cue pinverification=always        
+auth       required pam_unix.so
+account    include system-auth
+password   include system-auth
+session    optional pam_keyinit.so revoke
+session    required pam_limits.so
+session    include system-auth
+' | sudo tee "${i}"
+done
+
+
+echo '
+auth        sufficient    pam_u2f.so authfile=/etc/u2f_mappings cue pinverification=always
+auth        include       postlogin
+
+account     required      pam_nologin.so
+account     include       password-auth
+
+password    substack      password-auth
+-password   optional      pam_gnome_keyring.so use_authtok
+
+session     required      pam_selinux.so close
+session     required      pam_loginuid.so
+session     required      pam_selinux.so open
+session     optional      pam_keyinit.so force revoke
+session     required      pam_namespace.so
+session     include       password-auth
+session     optional      pam_gnome_keyring.so auto_start
+session     include       postlogin
+' | sudo tee /etc/pam.d/gdm
