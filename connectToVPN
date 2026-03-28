@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+VPN_CONNECTION_NAME="$(jc nmcli connection show \
+                       | jq --raw-output '.[] | select(.type == "vpn") | .name')"
+nmcli connection up "${VPN_CONNECTION_NAME}"
