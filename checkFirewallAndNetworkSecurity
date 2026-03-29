@@ -1,0 +1,49 @@
+#!/bin/env bash
+
+
+firewall() {
+  echo -e " 🧱\033[38;2;00;100;00m Firewall\033[0m"
+  FIREWALLD_SATE=$(firewall-cmd --state)
+  if [[ -z "${FIREWALLD_SATE}" ]]; then
+      echo -e "     \033[31mNot running\033[0m"
+  else
+      echo -e "     \033[32m${FIREWALLD_SATE}\033[0m"
+  fi
+  echo ""
+}
+
+vpn() {
+  VPN_CONNECTION_NAME=$(jc nmcli connection show --active | jq --raw-output '.[] | select(.type == "vpn") | .name')
+  echo -e " 🔐\033[38;2;00;100;00m VPN Connections\033[0m"
+  if [[ -z "${VPN_CONNECTION_NAME}" ]]; then
+      echo -e "     \033[31mNone\033[0m"
+  else
+      echo -e "     \033[32m${VPN_CONNECTION_NAME}\033[0m"
+  fi
+  echo ""
+}
+
+users() {
+  echo -e " 👤\033[38;2;00;100;00m Users\033[0m"
+  echo "     $(jc who | jq --raw-output '.[] | .user' | sort | uniq)"
+  echo ""
+}
+
+dns() {
+  DNS_SERVERS=$(nmcli device show | awk '/IP4.DNS/{print $2}')
+  echo -e " 🌐\033[38;2;00;100;00m DNS\033[0m"
+  if [[ -z "${DNS_SERVERS}" ]]; then
+      echo -e "     \033[31mNone\033[0m"
+  else
+      for i in ${DNS_SERVERS}; do
+          echo "     ${i}"
+      done
+  fi
+  echo ""
+}
+
+
+echo ""
+for i in firewall vpn users dns; do
+    ${i}
+done
