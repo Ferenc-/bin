@@ -2,17 +2,17 @@
 
 check() {
   if [ "${CURRENT}" != "${LATEST}" ]; then
-      echo -e "\033[31mNew ${NAME} version available: ${LATEST} (current: ${CURRENT})\033[0m"
+    echo -e "\033[31mNew ${NAME} version available: ${LATEST} (current: ${CURRENT})\033[0m"
   else
-      echo -e "\033[32m${NAME} version is already the latest ${LATEST}\033[0m"
+    echo -e "\033[32m${NAME} version is already the latest ${LATEST}\033[0m"
   fi
 }
 
 freedesktopsdk() {
   NAME="Freedesktop SDK"
   CURRENT='25.08'
-  LATEST="$(curl --silent https://gitlab.com/api/v4/projects/4339844/releases \
-            | jq --raw-output '[
+  LATEST="$(curl --silent https://gitlab.com/api/v4/projects/4339844/releases |
+    jq --raw-output '[
                                  .[]
                                  | select(.tag_name | contains("rc") | not) 
                                  | .tag_name 
@@ -26,7 +26,7 @@ freedesktopsdk() {
 
 golang() {
   NAME="Golang"
-  CURRENT='1.26.1'
+  CURRENT='1.26.2'
   LATEST="$(curl -s https://go.dev/VERSION?m=text | head -1 | sed 's/go//')"
 }
 
@@ -49,6 +49,6 @@ postamrketos() {
 }
 
 for i in freedesktopsdk golang kubernetes openwrt postamrketos; do
-    ${i}
-    check
+  ${i}
+  check
 done
