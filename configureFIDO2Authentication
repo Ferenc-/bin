@@ -1,11 +1,22 @@
 #!/usr/bin/env bash
 
+# NOTE: This will not unlock your Gnome Keyring / KDE Wallet after login.
+# See:
+# https://unix.stackexchange.com/questions/551021/how-to-unlock-gnome-keyring-after-passwordless-login-with-solokey-yubiko
+# https://github.com/recolic/gnome-keyring-yubikey-unlock
+#
+# NOTE: For 1Password one still needs this (the system authentication),
+# and only if the main password has been provided after each reboot or cache timeout.
+# https://support.1password.com/system-authentication-linux/
+# Or Fido2 can be used as a 2nd factor
+# https://www.token2.com/site/page/securing-1password-account-with-token2-fido-security-keys
+
 while fido2-token -L | grep product; do
  echo "No authenticator device found. Make sure you connect it first!"
  sleep 5
 done
 
-# In some tutorials the pam_u2f is explicitly configured with `authfile=/etc/u2f_mappings`
+# NOTE: In some tutorials the pam_u2f is explicitly configured with `authfile=/etc/u2f_mappings`
 # here we are going with the second default see [man 8 pam_u2f](
 # https://manpages.ubuntu.com/manpages/resolute/man8/pam_u2f.8.html)
 # ```
@@ -15,9 +26,9 @@ done
 #
 mkdir -p ~/.config/Yubico
 chmod 700 ~/.config/Yubico
-pamu2fcfg --pin-verification --username="${USER}" > ~/.config/Yubico/u2f_keys
+pamu2fcfg --pin-verification --username="${USER}" >~/.config/Yubico/u2f_keys
 chmod 600 ~/.config/Yubico/u2f_keys
-# The format is incompletely documented in most howtos and even in the manapage
+# NOTE: The format is incompletely documented in most howtos and even in the manapage
 # https://manpages.ubuntu.com/manpages/resolute/man8/pam_u2f.8.html
 # `authfile=file` section
 # 1. You can only use the same `username` once per file!
@@ -25,20 +36,18 @@ chmod 600 ~/.config/Yubico/u2f_keys
 #    `username:keyHandle1,public_key1,es256,+presence+pin:keyHandle2,public_key2,es256,+presence+pin`
 # So if you add more keys, then you have to manually edit `~/.config/Yubico/u2f_keys`
 #
-
-
 # Authselect
 # As of Fedora 40+ `local` should be the new default profile
 # based on the former `minimal` replacing `sssd`.
 # https://fedoramagazine.org/authselect-in-fedora-linux-40-migrating-to-the-new-local-profile/
-# 
+#
 # [Authselect](https://github.com/authselect/authselect)
 # will manage the `/etc/pam.d/system-auth` symlink to ,
 # and as long as /etc/pam.d/{login,sudo,gdm-password} unmanaged files
 # have the `auth include system-auth` as the first line,
 # the managed configuration will have the highest precedence.
 #
-# Keep in mind that authselect has some current open-issue limitations, 
+# Keep in mind that authselect has some current open-issue limitations,
 # which require manual workarounds
 # for example fingerprint might have higher priority than FIDO:
 # https://github.com/authselect/authselect/issues/335
@@ -55,7 +64,6 @@ authselect list-features local | grep with-pam-u2f
 authselect current
 sudo authselect select local with-pam-u2f
 
-
 # Alternative (avoid if you can) disable authselect and edit pam config files manually
 #
 #sudo touch /etc/u2f_mappings
@@ -64,7 +72,7 @@ sudo authselect select local with-pam-u2f
 #for i in /etc/pam.d/login /etc/pam.d/sudo; do
 #echo '
 ##%PAM-1.0                                                                                                                                                                              [0/165]
-#auth       sufficient   pam_u2f.so cue pinverification=always        
+#auth       sufficient   pam_u2f.so cue pinverification=always
 #auth       required pam_unix.so
 #account    include system-auth
 #password   include system-auth
