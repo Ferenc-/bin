@@ -1,13 +1,69 @@
 #!/usr/bin/env bash
 
-SECRET_TOKEN="SECRET-T-12345"
+export SECRET_TOKEN="SECRET-T-12345"
 
-curl -sfL https://get.k3s.io | K3S_TOKEN="${SECRET_TOKEN}" sh -s - server --cluster-init --etcd-expose-metrics=true
-curl -sfL https://get.k3s.io | K3S_TOKEN="${SECRET_TOKEN}" sh -s - server --server https://node1.XYZ.com:6443 --etcd-expose-metrics=true
-curl -sfL https://get.k3s.io | K3S_TOKEN="${SECRET_TOKEN}" sh -s - server --server https://node1.XYZ.com:6443 --etcd-expose-metrics=true
+curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION='v1.20.15+k3s1' K3S_TOKEN="${SECRET_TOKEN}" sh -s - server \
+  --cluster-init \
+  --kube-apiserver-arg=bind-address=0.0.0.0 \
+  --kube-controller-manager-arg=bind-address=0.0.0.0 \
+  --kube-scheduler-arg=bind-address=0.0.0.0 \
+  --kube-controller-manager-arg=secure-port=10257 \
+  --kube-scheduler-arg=secure-port=10259 \
+  --etcd-expose-metrics=true
+
+# This is the default port yet, specifiying this errors out with port already in use:
+# --kube-apiserver-arg=secure-port=6443 \
+
+curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION='v1.20.15+k3s1' K3S_TOKEN="${SECRET_TOKEN}" sh -s - server \
+  --server https://9.60.207.112:6443 \
+  --kube-apiserver-arg=bind-address=0.0.0.0 \
+  --kube-controller-manager-arg=bind-address=0.0.0.0 \
+  --kube-scheduler-arg=bind-address=0.0.0.0 \
+  --kube-controller-manager-arg=secure-port=10257 \
+  --kube-scheduler-arg=secure-port=10259 \
+  --etcd-expose-metrics=true
+
+# This is the default port yet, specifiying this errors out with port already in use:
+# --kube-apiserver-arg=secure-port=6443 \
+
+curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION='v1.20.15+k3s1' K3S_TOKEN="${SECRET_TOKEN}" sh -s - server \
+  --server https://9.60.207.112:6443 \
+  --kube-apiserver-arg=bind-address=0.0.0.0 \
+  --kube-controller-manager-arg=bind-address=0.0.0.0 \
+  --kube-scheduler-arg=bind-address=0.0.0.0 \
+  --kube-controller-manager-arg=secure-port=10257 \
+  --kube-scheduler-arg=secure-port=10259 \
+  --etcd-expose-metrics=true
+
+# This is the default port yet, specifiying this errors out with port already in use:
+# --kube-apiserver-arg=secure-port=6443 \
 
 # Any value in
 # --tls-san=<FIXED_IP> # Optional, needed if using a fixed registration address
-#
-# Test with:
+
+# # Test metrics
+# ## ETCD metrics:
 # curl -sL http://localhost:2381/metrics | awk '/etcd_server_is_leader/ || /etcd_server_leader_changes_seen_total/'
+# kubectl get --server http://k3s-metrics1.dev.fyre.ibm.com:2381 --raw /metrics | awk '/etcd_server_is_leader/ || /etcd_server_leader_changes_seen_total/'
+# ### From a pod:
+#
+#  wget -O- 9.60.207.112:2381/metrics | awk '/etcd_server_is_leader/ || /etcd_server_leader_changes_seen_total/'
+#  wget -O- k3s-metrics1.dev.fyre.ibm.com:2381/metrics | awk '/etcd_server_is_leader/ || /etcd_server_leader_changes_seen_total/'
+#
+# ## Scheduler & APIServer etc metrics:
+# ### With kubectl
+# kubectl get --server https://localhost:6443 --raw /metrics | awk '/^scheduler_/ || /^apiserver_/'
+#
+# ## Alternatively with curl:
+# yq '.users[] | select( .name == "k3s-fyre-user" ) | .user.client-certificate-data' ~/.kube/config | base64 -d > client.crt
+# yq '.users[] | select( .name == "k3s-fyre-user" ) | .user.client-key-data' ~/.kube/config | base64 -d > client.key
+#
+#
+# curl -k \
+#   --cert ./client.crt \
+#   --key ./client.key \
+#   https://k3s-metrics1.dev.fyre.ibm.com:6443/metrics
+#
+#
+#  optionally
+#   --cacert ~/.kube/ca.crt \
