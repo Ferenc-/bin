@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+if ! cd ~/.config/nvm 2>/dev/null; then
+  echo "NVM doesn't seem to be installed exiting."
+  exit 1
+fi
+git fetch --all
+git checkout "$(git tag -l "v*.*.*" --sort=-version:refname | head -n1)"
