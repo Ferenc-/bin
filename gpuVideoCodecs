@@ -24,3 +24,9 @@ lspci -mmv |
       ;;
     esac
   done
+
+# sudo dnf install vulkan-tools
+echo
+echo 'Vulkan supported HW Codecs:'
+echo
+vulkaninfo 2>&1 | awk '/VK_KHR_video_decode_[^q]/{print substr($1,21,length($1))}'
