@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+flatpak run --command=flatpak-builder-lint org.flatpak.Builder repo ./x86_64-repo
+flatpak run --command=flatpak-builder-lint org.flatpak.Builder appstream metainfo.xml
+flatpak run --command=appstreamcli org.flatpak.Builder validate --pedantic metainfo.xml
