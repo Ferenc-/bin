@@ -16,7 +16,7 @@ lspci -mmv |
       echo 'NVIDIA supported HW Codecs:'
       echo
       # github.com/philipl/nv-video-info
-      nvdecinfo | awk '/---/{found=$found+1; next} found=2{print $1}'
+      nvdecinfo | awk 'NR >4 && /[^-]/{print $1}'
       ;;
     *)
       echo "Unkown vendor: ${vendor}"
