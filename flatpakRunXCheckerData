@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+flatpak run --filesystem="${PWD}" org.flathub.flatpak-external-data-checker "${1}" -v
