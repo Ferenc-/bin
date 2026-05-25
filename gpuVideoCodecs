@@ -1,32 +1,88 @@
 #!/usr/bin/env bash
-lspci -mmv |
-  jc --lspci |
-  jq --raw-output '.[] | select(.class == "VGA compatible controller") | .vendor' |
-  while read -r vendor; do
-    case "${vendor}" in
-    'Intel Corporation')
-      echo
-      echo 'Intel supported HW Codecs:'
-      echo
-      # sudo dnf install libva-utils
-      vainfo 2>&1 | awk '/Supported profile and entrypoints/{found=1; next} found{print substr($1,10,length($1))}'
-      ;;
-    'NVIDIA Corporation')
-      echo
-      echo 'NVIDIA supported HW Codecs:'
-      echo
-      # github.com/philipl/nv-video-info
-      nvdecinfo | awk 'NR >4 && /[^-]/{print $1}' | sort | uniq
-      ;;
-    *)
-      echo "Unkown vendor: ${vendor}"
-      exit 1
-      ;;
-    esac
-  done
 
-# sudo dnf install vulkan-tools
-echo
-echo 'Vulkan supported HW Codecs:'
-echo
-vulkaninfo 2>&1 | awk '/VK_KHR_video_decode_[^q]/{print substr($1,21,length($1))}'
+v4l2_check() {
+  for d in /dev/video*; do v4l2-ctl -d "${d}" --list-ctrls; done | awk -F _ '/h26/ || /mpeg/ || /vp/ || /vc/ || /av1/ || /hevc/ || /xvid/ {gsub(/ /, "", $1); print $1}' | sort | uniq
+}
+
+if [[ -d /sys/bus/platform/drivers/cedrus/ ]]; then
+  # Cedrus via `v4l2-request`
+  # https://linux-sunxi.org/Sunxi-Cedrus#Codec_Support
+  # upstream `ffmpeg` currently does not support `v4l2-request` so that won't work
+  # downstream `ffmpeg-v4l2-requests` https://github.com/beryllium-org/sbc-pkgbuilds/tree/main/ffmpeg-v4l2-requests
+  # a patched version of this branch: https://github.com/Kwiboo/FFmpeg/tree/v4l2-request-n8.1
+  # mpv has to be built with downstream ffmpeg and ran with `--hwdec=drm`
+  # See: https://wiki.pine64.org/wiki/Mainline_Hardware_Decoding#mpv
+  # Clapper can use `v4l2-request` API
+  # In theory VLC as well: https://linux-sunxi.org/Sunxi-Cedrus#VLC
+  v4l2_check
+  # Does not support vulkan at all
+
+elif [[ -d /sys/bus/platform/drivers/hantro-vpu/ ]]; then
+  # Verisilicon Hantro VPU
+  # https://www.verisilicon.com/en/IPPortfolio/HantroVPUIP
+  # From RK3588: https://lwn.net/Articles/919003/
+  # RK3588 has AV1 but currently no VP9 etc (SW support):
+  # https://gitlab.collabora.com/hardware-enablement/rockchip-3588/notes-for-rockchip-3588/-/blob/7800932bc7e12c3ab0b11b8f21c5bfdfa16871a2/mainline-status.md
+  # Hardware capabilities:
+  # https://wiki.pine64.org/wiki/Mainline_Hardware_Decoding#Supported_Codecs_By_SoC
+  v4l2_check
+  # Vulkan support depends on GPU:
+  # https://docs.mesa3d.org/drivers/panfrost.html
+  # RK3399 Has Mali-T864, which does not support Vulkan at all
+  # RK3588S Has Mali-G610MP4 with Vulkan 1.4
+
+elif [[ -d /sys/bus/platform/drivers/qcom-venus-decoder/ ]]; then
+  # Venus via `v4l2-m2m`
+  # ffmpeg works with `--hwdec=v4l2m2m-copy`
+  # https://wiki.postmarketos.org/wiki/Hardware_video_acceleration
+  # There is no AV1 support
+  # https://github.com/torvalds/linux/blob/master/drivers/media/platform/qcom/venus/vdec.c
+  v4l2_check
+  # Vulkan support starts with the 400 series
+  # https://en.wikipedia.org/wiki/Adreno#Adreno_400_series
+
+elif [[ -d /sys/bus/platform/drivers/qcom-iris-decoder/ ]]; then
+  # Iris has currently 2 generations
+  # Gen 1 - no AV1
+  # https://github.com/torvalds/linux/blob/e8c2f9fdadee7cbc75134dc463c1e0d856d6e5c7/drivers/media/platform/qcom/iris/iris_hfi_gen1_defines.h#L16
+  # Gen 2 - with AV1
+  # https://github.com/torvalds/linux/blob/e8c2f9fdadee7cbc75134dc463c1e0d856d6e5c7/drivers/media/platform/qcom/iris/iris_hfi_gen2_defines.h#L163
+  v4l2_check
+
+elif [[ -d /sys/bus/pci ]]; then
+  # PCI & PCI-Express cards
+  lspci -mmv |
+    jc --lspci |
+    jq --raw-output '.[] | select(.class == "VGA compatible controller") | .vendor' |
+    while read -r vendor; do
+      case "${vendor}" in
+      'Intel Corporation')
+        echo
+        echo 'Intel supported HW Codecs:'
+        echo
+        # sudo dnf install libva-utils
+        vainfo 2>&1 | awk '/Supported profile and entrypoints/{found=1; next} found{print substr($1,10,length($1))}'
+        ;;
+      'NVIDIA Corporation')
+        echo
+        echo 'NVIDIA supported HW Codecs:'
+        echo
+        # github.com/philipl/nv-video-info
+        nvdecinfo | awk 'NR >4 && /[^-]/{print $1}' | sort | uniq
+        ;;
+      *)
+        echo "Unkown vendor: ${vendor}"
+        exit 1
+        ;;
+      esac
+    done
+
+  # sudo dnf install vulkan-tools
+  echo
+  echo 'Vulkan supported HW Codecs:'
+  echo
+  vulkaninfo 2>&1 | awk '/VK_KHR_video_decode_[^q]/{print substr($1,21,length($1))}'
+
+else
+  echo "Unkown hardware"
+fi
