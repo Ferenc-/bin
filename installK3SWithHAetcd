@@ -55,6 +55,9 @@ curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION='v1.20.15+k3s1' K3S_TOKEN="${
 # Any value in
 # --tls-san=<FIXED_IP> # Optional, needed if using a fixed registration address
 
+# NOTE: Get the kubeconfig
+# cat /etc/rancher/k3s/k3s.yaml
+
 # # Test metrics
 # ## ETCD metrics:
 # curl -sL http://localhost:2381/metrics | awk '/etcd_server_is_leader/ || /etcd_server_leader_changes_seen_total/'
