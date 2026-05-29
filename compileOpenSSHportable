@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+TARGET_VERSION='10.3p1'
+
+sudo apt install \
+  libssl-dev \
+  gcc g++ gdb cpp \
+  make cmake \
+  libtool \
+  libc6 \
+  autoconf automake pkg-config \
+  build-essential \
+  gettext
+
+#wget https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/RELEASE_KEY.asc
+#gpg --import RELEASE_KEY.asc
+#wget "https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-${TARGET_VERSION}.tar.gz.asc"
+wget "https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-${TARGET_VERSION}.tar.gz"
+#gpg --verbose --verify "openssh-${TARGET_VERSION}.tar.gz.asc"
+
+tar -xf "openssh-${TARGET_VERSION}.tar.gz"
+cd "openssh-${TARGET_VERSION}"
+./configure
+make
