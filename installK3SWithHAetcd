@@ -66,6 +66,8 @@ curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION='v1.20.15+k3s1' K3S_TOKEN="${
 #
 #  wget -O- 9.60.207.112:2381/metrics | awk '/etcd_server_is_leader/ || /etcd_server_leader_changes_seen_total/'
 #  wget -O- k3s-metrics1.dev.fyre.ibm.com:2381/metrics | awk '/etcd_server_is_leader/ || /etcd_server_leader_changes_seen_total/'
+#  # If the manually created SVC is up
+#  wget -O- etcd-metrics.kube-system:2381/metrics | awk '/etcd_server_is_leader/ || /etcd_server_leader_changes_seen_total/'
 #
 # ## Scheduler & APIServer etc metrics:
 # ### With kubectl
