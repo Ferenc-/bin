@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+ping6 2620:fe::9
