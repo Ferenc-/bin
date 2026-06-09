@@ -1,0 +1,2 @@
+# ip -6 route add default via <gateway_address> dev <interface>
+ip -6 route add default via fdea:d9be:9d61:: dev enp44s0u2
