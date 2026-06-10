@@ -86,3 +86,7 @@ curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION='v1.20.15+k3s1' K3S_TOKEN="${
 #
 #  optionally
 #   --cacert ~/.kube/ca.crt \
+
+# Test Traefik prometheus port:
+# Get the `podIP` from the Traefik pod and:
+# wget -O- http://[fd42::15f]:9100/metrics | less
