@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+NODE1='<fillme>'
+NODE2='<fillme>'
+NODE3='<fillme>'
+
+# Ensure supported distro:
+#https://www.suse.com/suse-rke2/support-matrix/all-supported-versions/rke2-v1-34/
+
+# https://docs.rke2.io/install/configuration
+# The RKE2 config file needs to be created manually. You can do that by running touch /etc/rancher/rke2/config.yaml as a privileged user
+# https://docs.rke2.io/install/ha#2-launch-the-first-server-node
+#
+ssh "root@${NODE1}" 'mkdir -p /etc/rancher/rke2/ && touch /etc/rancher/rke2/config.yaml'
+ssh "root@${NODE1}" 'cat >/etc/rancher/rke2/config.yaml' <<EOF
+token: my-shared-secret
+tls-san:
+  - $NODE1
+EOF
+
+ssh "root@${NODE1}" 'curl -sfL https://get.rke2.io | sh -'
+ssh "root@${NODE1}" 'systemctl enable rke2-server.service && systemctl start rke2-server.service'
+
+for n in ${NODE2} ${NODE3}; do
+  # https://docs.rke2.io/install/ha#3-launch-additional-server-nodes
+  ssh "root@${n}" 'mkdir -p /etc/rancher/rke2/ && touch /etc/rancher/rke2/config.yaml'
+  ssh "root@${n}" 'cat >/etc/rancher/rke2/config.yaml' <<EOF
+server: https://$NODE1:9345
+token: my-shared-secret
+tls-san:
+  - $n
+EOF
+  ssh "root@${n}" 'curl -sfL https://get.rke2.io | sh -'
+  ssh "root@${n}" 'systemctl enable rke2-server.service && systemctl start rke2-server.service'
+done
+
+# https://docs.rke2.io/install/ha#4-confirm-cluster-is-functional
+# Watch until all 3 is Ready
+ssh "root@${NODE1}" /var/lib/rancher/rke2/bin/kubectl get nodes --kubeconfig /etc/rancher/rke2/rke2.yaml --watch
