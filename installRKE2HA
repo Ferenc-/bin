@@ -13,6 +13,22 @@ NODE3='<fillme>'
 #
 # Exposing etcd-metrics with `listen-metrics-url`
 # https://github.com/rancher/rke2/discussions/4024
+#
+# Scheduler metrics by default are only available on 127.0.0.1 (normally vanilla kubernetes would do 0.0.0.0),
+# but this is a security hardening on RKE2.
+# By default on RKE2 this works:
+# /var/lib/rancher/rke2/bin/kubectl get --kubeconfig /etc/rancher/rke2/rke2.yaml --server https://127.0.0.1:10259 --raw /metrics | less
+# Exposing them for cluster internal traffic, with `kube-scheduler-arg`
+# https://docs.rke2.io/reference/server_config#flags
+# In particular with `bind-address`
+# https://kubernetes.io/docs/reference/command-line-tools-reference/kube-scheduler/#options
+#
+# And this is still not enough because the certificate is invalid for anything else than 127.0.0.1:
+# `Unable to connect to the server: tls: failed to verify certificate: x509: certificate is valid for 127.0.0.1, ::1, not 9.30.138.200`
+# So you have to do:
+# /var/lib/rancher/rke2/bin/kubectl get --kubeconfig /etc/rancher/rke2/rke2.yaml --insecure-skip-tls-verify  --server https://9.30.138.200:10259 --raw /metrics | less
+# Or from inside of the curl container that has the Service Account:
+# curl -k -H "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"   https://9.30.138.200:10259/metrics | less -R
 ssh "root@${NODE1}" 'mkdir -p /etc/rancher/rke2/ && touch /etc/rancher/rke2/config.yaml'
 ssh "root@${NODE1}" 'cat >/etc/rancher/rke2/config.yaml' <<EOF
 token: my-shared-secret
@@ -20,6 +36,8 @@ tls-san:
   - $NODE1
 etcd-arg:
   - "listen-metrics-urls=http://0.0.0.0:2381"
+kube-scheduler-arg:
+  - "bind-address=0.0.0.0"
 EOF
 
 ssh "root@${NODE1}" 'curl -sfL https://get.rke2.io | sh -'
@@ -35,6 +53,8 @@ tls-san:
   - $n
 etcd-arg:
   - "listen-metrics-urls=http://0.0.0.0:2381"
+kube-scheduler-arg:
+  - "bind-address=0.0.0.0"
 EOF
   ssh "root@${n}" 'curl -sfL https://get.rke2.io | sh -'
   ssh "root@${n}" 'systemctl enable rke2-server.service && systemctl start rke2-server.service'
