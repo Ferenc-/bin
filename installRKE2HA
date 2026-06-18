@@ -38,6 +38,10 @@ etcd-arg:
   - "listen-metrics-urls=http://0.0.0.0:2381"
 kube-scheduler-arg:
   - "bind-address=0.0.0.0"
+kube-controller-manager-arg:
+  - "bind-address=0.0.0.0"
+kube-apiserver-arg:
+  - "bind-address=0.0.0.0"
 EOF
 
 ssh "root@${NODE1}" 'curl -sfL https://get.rke2.io | sh -'
@@ -54,6 +58,10 @@ tls-san:
 etcd-arg:
   - "listen-metrics-urls=http://0.0.0.0:2381"
 kube-scheduler-arg:
+  - "bind-address=0.0.0.0"
+kube-controller-manager-arg:
+  - "bind-address=0.0.0.0"
+kube-apiserver-arg:
   - "bind-address=0.0.0.0"
 EOF
   ssh "root@${n}" 'curl -sfL https://get.rke2.io | sh -'
