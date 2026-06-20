@@ -29,6 +29,12 @@ NODE3='<fillme>'
 # /var/lib/rancher/rke2/bin/kubectl get --kubeconfig /etc/rancher/rke2/rke2.yaml --insecure-skip-tls-verify  --server https://9.30.138.200:10259 --raw /metrics | less
 # Or from inside of the curl container that has the Service Account:
 # curl -k -H "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"   https://9.30.138.200:10259/metrics | less -R
+#
+# The `controller-manager`  & `apiserver` also need the same args similarly.
+# Test the API server with:
+# curl -k -H "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" https://kubernetes.default.svc:443/metrics  | less -R
+# Test the controller-manager with:
+# curl -k -H "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" https:///9.30.138.200:10259/metrics | less -R
 ssh "root@${NODE1}" 'mkdir -p /etc/rancher/rke2/ && touch /etc/rancher/rke2/config.yaml'
 ssh "root@${NODE1}" 'cat >/etc/rancher/rke2/config.yaml' <<EOF
 token: my-shared-secret
