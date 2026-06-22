@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -euo pipefail
+kubectl exec -it -n instana-agent daemonset/instana-agent -- \
+  sed -i 's|org.ops4j.pax.url.mvn.repositories=https://artifact-public.instana.io/artifactory/shared@id=shared@snapshots@snapshotsUpdate=always|org.ops4j.pax.url.mvn.repositories=https://artifact-public.instana.io/artifactory/features-internal@id=features@snapshots@snapshotsUpdate=always,https://artifact-public.instana.io/artifactory/shared@id=shared|g' /opt/instana/agent/etc/org.ops4j.pax.url.mvn.cfg
