@@ -32,7 +32,7 @@ golang() {
 
 kubernetes() {
   NAME="Kubernetes"
-  CURRENT='1.36.0'
+  CURRENT='1.36.1'
   LATEST="$(curl -s https://dl.k8s.io/release/stable.txt | sed 's/v//')"
 }
 
