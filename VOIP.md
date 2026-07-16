@@ -57,3 +57,31 @@ stunServers=stun.1und1.de
 realm=*
 port=5061
 ```
+
+## Vodafone DSL
+
+### VOIP + DSL
+
+https://forum.vodafone.de/t5/Community-Blog/SIP-Daten-Festnetz-Telefonie-f%C3%BCr-Deinen-eigenen-Router/ba-p/3044338
+
+Du hast einen DSL-Vertrag? 
+Dann richtest Du Deine Festnetz-Telefonie ganz einfach über die Router-Oberfläche ein. Die SIP-Daten dafür findest Du im Willkommensbrief oder in MeinVodafone. 
+
+Für die SIP-Telefonie brauchst Du eventuell noch folgende Daten:
+```
+Username:                  02111234567 (Deine Rufnummer inkl. Vorwahl)
+SIP-Proxy:                   0211.sip.arcor.de (nur die Vorwahl eintragen/ändern)
+SIP-Domainname:   arcor.de
+```
+
+### Own DSL-Router setup
+
+https://forum.vodafone.de/t5/Community-Blog/Router-kaufen-oder-leihen-Welches-Ger%C3%A4t-passt-zu-Dir/ba-p/2238464
+
+Eigenen DSL-Router melden
+
+    Schließ Deinen eigenen Router an die Telefondose 
+    Gib dann die Zugangsdaten für Internet und Telefon ein. Du bekommst sie im Willkommensbrief. Übrigens: Den Willkommensbrief findest Du auch in MeinVodafone  
+    Das war’s – jetzt kannst Du mit deinem eigenen Router surfen  
+
+Wichtig: Die Zugangsdaten in Deinem Willkommensbrief sind 40 Tage nach Anschalt-Datum gültig.
