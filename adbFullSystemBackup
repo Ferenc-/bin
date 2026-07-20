@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+adb backup -f ~/Downloads/backup.ab -apk -obb -shared -all -system -keyvalue
