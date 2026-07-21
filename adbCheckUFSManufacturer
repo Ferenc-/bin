@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+adb bugreport
+#This should have downloaded a `~/Downloads/bugreport-sheng_*.zip` file on your machine, unhzip it:
+mv "${HOME}/Downloads/bugreport-sheng_*.zip" .
+unzip bugreport-sheng_*.zip
+
+#Then there has to be a `dumpstate_board.txt` file among the unpacked results, read and search for `UFS INQUIRY ID`.
+#Which should also list your UFS manufacturer:
+strings dumpstate_board.txt | grep 'UFS INQUIRY ID: '
+
+#In my case it is micron, so this is good to go:
+#```
+#strings dumpstate_board.txt | grep  'UFS INQUIRY ID: '
+#```
