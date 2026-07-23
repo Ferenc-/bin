@@ -8,8 +8,8 @@ curl X GET \
   --silent \
   -H "Authorization: Bearer ${BEARER_TOKEN}" \
   -H "Content-Type: application/json" \
-  "https://jsw.ibm.com/rest/api/latest/search?jql=${JQL_QUERY}" \
-| jq --color-output "${JQ_FILTER}" \
-| tr '\n' ' ' \
-| xargs printf '%-26s | %s | %s\n' \
-| sort --reverse
+  "https://jsw.ibm.com/rest/api/latest/search?jql=${JQL_QUERY}" |
+  jq --color-output "${JQ_FILTER}" |
+  tr '\n' ' ' |
+  xargs printf '%-26s | %-23s | %s\n' |
+  sort --reverse
