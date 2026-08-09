@@ -86,6 +86,11 @@ curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION='v1.20.15+k3s1' K3S_TOKEN="${
 #
 #  optionally
 #   --cacert ~/.kube/ca.crt \
+#
+# For accessing via service name with
+# `curl -k -H "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"   https://kube-scheduler.kube-system.svc:10257/metrics `
+# Use external SVC definition, from inside of a debug pod.
+#
 
 # Test Traefik prometheus port:
 # Get the `podIP` from the Traefik pod and:
