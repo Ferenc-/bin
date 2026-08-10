@@ -60,7 +60,7 @@ curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION='v1.20.15+k3s1' K3S_TOKEN="${
 
 # # Test metrics
 # ## ETCD metrics:
-# curl -sL http://localhost:2381/metrics | awk '/etcd_server_is_leader/ || /etcd_server_leader_changes_seen_total/'
+# curl -sL http://localhost:2381/metrics | awk '/etcd_server_is_leader/ || /etcd_server_leader_changes_seen_total/ || /etcd_network_client_grpc_received_bytes_total/ || /etcd_network_client_grpc_sent_bytes_total/ || /etcd_mvcc_put_total/ || /etcd_mvcc_delete_total/ || /etcd_mvcc_range_total/ || /etcd_mvcc_txn_total/'
 # kubectl get --server http://k3s-metrics1.dev.fyre.ibm.com:2381 --raw /metrics | awk '/etcd_server_is_leader/ || /etcd_server_leader_changes_seen_total/'
 # ### From a pod:
 #
