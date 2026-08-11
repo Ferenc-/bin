@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+cloudflare='1.1.1.1'
+google='8.8.8.8'
+quad9='9.9.9.9'
+
+for record in A AAAA; do
+  dig "${1}" "${record}" +dnssec @"${quad9}"
+done
