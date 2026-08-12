@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+wget -qO- on.quad9.net | awk '/<title>/ { gsub(/<[^>]+>/, ""); print }'
