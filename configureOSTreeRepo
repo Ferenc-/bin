@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+REPO=${1:-x86_64-repo}
+ostree init --repo="${REPO}" --mode=archive-z2
+ostree config --repo="${REPO}" set core.min-free-space-size "1GB"
