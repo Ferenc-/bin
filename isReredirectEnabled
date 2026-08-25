@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+if type reredirect >/dev/null && type relink >/dev/null && [[ "$(</proc/sys/kernel/yama/ptrace_scope)" = 0 ]]; then
+  echo "✅ Yes"
+else
+  echo "❌ NO"
+fi
