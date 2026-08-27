@@ -26,7 +26,7 @@ freedesktopsdk() {
 
 golang() {
   NAME="Golang"
-  CURRENT='1.27.0'
+  CURRENT='1.27.1'
   LATEST="$(curl -s https://go.dev/VERSION?m=text | head -1 | sed 's/go//')"
 }
 
