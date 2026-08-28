@@ -14,7 +14,7 @@ freedesktopsdk() {
   LATEST="$(curl --silent https://gitlab.com/api/v4/projects/4339844/releases |
     jq --raw-output '[
                                  .[]
-                                 | select(.tag_name | contains("rc") | not) 
+                                 | select(.tag_name | test("rc|beta") | not) 
                                  | .tag_name 
                                  | sub("freedesktop-sdk-";"")
                                  | sub(".[0-9]+$";"")
