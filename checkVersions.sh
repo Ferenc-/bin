@@ -10,7 +10,7 @@ check() {
 
 freedesktopsdk() {
   NAME="Freedesktop SDK"
-  CURRENT='25.08'
+  CURRENT='26.08'
   LATEST="$(curl --silent https://gitlab.com/api/v4/projects/4339844/releases |
     jq --raw-output '[
                                  .[]
