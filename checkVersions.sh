@@ -44,7 +44,7 @@ openwrt() {
 
 postamrketos() {
   NAME='postmarketOS'
-  CURRENT='25.12'
+  CURRENT='26.06'
   LATEST="$(wget -qO- 'https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/master/channels.cfg?ref_type=heads&inline=false' | awk 'match($0, /[[]v([0-9]{2}[.][0-9]{2})[]]/, arr) {printf "%s", arr[1]; exit}')"
 }
 
