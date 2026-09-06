@@ -2,4 +2,5 @@
 sudo apk add postmarketos-release-upgrade
 sudo apk update
 sudo apk upgrade --available
+sudo apk fix postmarketos-release
 sudo postmarketos-release-upgrade
