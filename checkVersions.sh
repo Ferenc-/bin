@@ -42,13 +42,13 @@ openwrt() {
   LATEST="$(wget -qO- https://downloads.openwrt.org/.versions.json | awk -F '"' '/"stable_version"/{print $4}')"
 }
 
-postamrketos() {
+postmarketos() {
   NAME='postmarketOS'
   CURRENT='26.06'
   LATEST="$(wget -qO- 'https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/master/channels.cfg?ref_type=heads&inline=false' | awk 'match($0, /[[]v([0-9]{2}[.][0-9]{2})[]]/, arr) {printf "%s", arr[1]; exit}')"
 }
 
-for i in freedesktopsdk golang kubernetes openwrt postamrketos; do
+for i in freedesktopsdk golang kubernetes openwrt postmarketos; do
   ${i}
   check
 done
