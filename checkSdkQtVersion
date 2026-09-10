@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+flatpak run --devel --command=qmake org.kde.Sdk//6.11 --version | awk '/Qt version/{print $4}'
