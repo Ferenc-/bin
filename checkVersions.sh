@@ -54,13 +54,7 @@ postmarketos() {
   LATEST="$(wget -qO- 'https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/master/channels.cfg?ref_type=heads&inline=false' | awk 'match($0, /[[]v([0-9]{2}[.][0-9]{2})[]]/, arr) {printf "%s", arr[1]; exit}')"
 }
 
-<<<<<<< Updated upstream
-for i in freedesktopsdk golang kubernetes openwrt postmarketos; do
-||||||| Stash base
-for i in freedesktopsdk golang kubernetes openwrt postamrketos; do
-=======
-for i in flatpakKdePlatform freedesktopsdk golang kubernetes openwrt postamrketos; do
->>>>>>> Stashed changes
+for i in flatpakKdePlatform freedesktopsdk golang kubernetes openwrt postmarketos; do
   ${i}
   check
 done
