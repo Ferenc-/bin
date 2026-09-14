@@ -1,5 +1,9 @@
 #!/bin/bash
 
+eolDate() {
+  curl -s "https://endoflife.date/api/${1}.json" | jq -r ".[0].${2}"
+}
+
 check() {
   if [ "${CURRENT}" != "${LATEST}" ]; then
     echo -e "\033[31mNew ${NAME} version available: ${LATEST} (current: ${CURRENT})\033[0m"
@@ -17,41 +21,31 @@ flatpakKdePlatform() {
 freedesktopsdk() {
   NAME="Freedesktop SDK"
   CURRENT='26.08'
-  LATEST="$(curl --silent https://gitlab.com/api/v4/projects/4339844/releases |
-    jq --raw-output '[
-                                 .[]
-                                 | select(.tag_name | test("rc|beta") | not) 
-                                 | .tag_name 
-                                 | sub("freedesktop-sdk-";"")
-                                 | sub(".[0-9]+$";"")
-                               ]
-                               | sort
-                               | reverse 
-                               | .[0]')"
+  LATEST="$(eolDate freedesktop-sdk cycle)"
 }
 
 golang() {
   NAME="Golang"
   CURRENT='1.27.1'
-  LATEST="$(curl -s https://go.dev/VERSION?m=text | head -1 | sed 's/go//')"
+  LATEST="$(eolDate go latest)"
 }
 
 kubernetes() {
   NAME="Kubernetes"
   CURRENT='1.37.0'
-  LATEST="$(curl -s https://dl.k8s.io/release/stable.txt | sed 's/v//')"
+  LATEST="$(eolDate kubernetes latest)"
 }
 
 openwrt() {
   NAME='OpenWrt'
   CURRENT='25.12.5'
-  LATEST="$(wget -qO- https://downloads.openwrt.org/.versions.json | awk -F '"' '/"stable_version"/{print $4}')"
+  LATEST="$(eolDate openwrt latest)"
 }
 
 postmarketos() {
   NAME='postmarketOS'
   CURRENT='26.06'
-  LATEST="$(wget -qO- 'https://gitlab.postmarketos.org/postmarketOS/pmaports/-/raw/master/channels.cfg?ref_type=heads&inline=false' | awk 'match($0, /[[]v([0-9]{2}[.][0-9]{2})[]]/, arr) {printf "%s", arr[1]; exit}')"
+  LATEST="$(eolDate postmarketos cycle)"
 }
 
 for i in flatpakKdePlatform freedesktopsdk golang kubernetes openwrt postmarketos; do
