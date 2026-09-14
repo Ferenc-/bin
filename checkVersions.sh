@@ -36,6 +36,12 @@ kubernetes() {
   LATEST="$(eolDate kubernetes latest)"
 }
 
+opnsense() {
+  NAME='OPNSense'
+  CURRENT='26.7.3'
+  LATEST="$(eolDate opnsense latest)"
+}
+
 openwrt() {
   NAME='OpenWrt'
   CURRENT='25.12.5'
@@ -54,7 +60,7 @@ qt() {
   LATEST="$(eolDate qt latest)"
 }
 
-for i in flatpakKdePlatform freedesktopsdk golang kubernetes openwrt postmarketos qt; do
+for i in flatpakKdePlatform freedesktopsdk golang kubernetes openwrt opnsense postmarketos qt; do
   ${i}
   check
 done
