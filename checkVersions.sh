@@ -48,7 +48,13 @@ postmarketos() {
   LATEST="$(eolDate postmarketos cycle)"
 }
 
-for i in flatpakKdePlatform freedesktopsdk golang kubernetes openwrt postmarketos; do
+qt() {
+  NAME='Qt'
+  CURRENT='6.11.2'
+  LATEST="$(eolDate qt latest)"
+}
+
+for i in flatpakKdePlatform freedesktopsdk golang kubernetes openwrt postmarketos qt; do
   ${i}
   check
 done
