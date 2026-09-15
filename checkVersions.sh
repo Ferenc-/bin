@@ -14,7 +14,7 @@ check() {
 
 flatpakKdePlatform() {
   NAME='org.kde.Platform//6.11'
-  CURRENT='2026-09-13'
+  CURRENT='2026-09-19'
   LATEST="$(flatpak --user remote-info --log flathub org.kde.Platform//6.11 | awk '/Date:/{ print $2; exit}')"
 }
 
