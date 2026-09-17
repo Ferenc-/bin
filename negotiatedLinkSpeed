@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# 1. Detect default active interface (or accept interface as first argument)                                                                                                                         13:50 [51/194]
+IFACE="${1:-$(ip route show default 2>/dev/null | awk '/default/ {print $5; exit}' || echo "")}"
+
+if [[ -z "$IFACE" ]]; then
+  # Fallback to the first non-loopback UP interface
+  IFACE=$(ip -o link show up | awk -F': ' '$2 !~ /^lo$/ {print $2; exit}')
+fi
+
+if [[ -z "$IFACE" ]]; then
+  echo "Error: No active network interface found." >&2
+  exit 1
+fi
+
+echo "Interface: $IFACE"
+
+# 2. Check if the interface is Wireless (Wi-Fi)
+is_wifi=false
+if [[ -d "/sys/class/net/$IFACE/wireless" ]] || [[ -d "/sys/class/net/$IFACE/phy80211" ]]; then
+  is_wifi=true
+fi
+
+if [[ "$is_wifi" == true ]]; then
+  echo "Type: Wireless (Wi-Fi)"
+  found=false
+
+  # Query Wi-Fi Security
+  security=$(nmcli -t -f ACTIVE,SECURITY dev wifi 2>/dev/null | awk -F: '$1=="yes" {print $2; exit}')
+  echo "Security: $security"
+
+  if command -v iw &>/dev/null; then
+    iw_out=$(iw dev "$IFACE" link 2>/dev/null || true)
+    if [[ -n "$iw_out" ]] && [[ "$iw_out" != *"Not connected"* ]]; then
+      tx_rate=$(echo "$iw_out" | awk -F': ' '/tx bitrate/ {print $2}')
+      rx_rate=$(echo "$iw_out" | awk -F': ' '/rx bitrate/ {print $2}')
+      ssid=$(echo "$iw_out" | awk -F': ' '/SSID/ {print $2}')
+
+      [[ -n "$ssid" ]] && echo "SSID: $ssid"
+      [[ -n "$tx_rate" ]] && echo "TX (Upload) Link Speed:   $tx_rate"
+      [[ -n "$rx_rate" ]] && echo "RX (Download) Link Speed: $rx_rate"
+      found=true
+    fi
+  else
+    echo "Could not query Wi-Fi link speed. Make sure you are connected and have 'iw' installed."
+  fi
+
+# 3. Wired (Ethernet) Interface
+else
+  echo "Type: Wired / Ethernet"
+  found=false
+
+  # Method A: sysfs speed file
+  SPEED_FILE="/sys/class/net/$IFACE/speed"
+  if [[ -f "$SPEED_FILE" ]] && [[ -r "$SPEED_FILE" ]]; then
+    speed=$(cat "$SPEED_FILE" 2>/dev/null || echo "")
+    if [[ "$speed" =~ ^[0-9]+$ ]]; then
+      echo "Negotiated Link Speed: ${speed} Mbps"
+      found=true
+    fi
+  fi
+
+  # Method B: `ethtool` fallback
+  if [[ "$found" == false ]] && command -v ethtool &>/dev/null; then
+    ethtool_speed=$(ethtool "$IFACE" 2>/dev/null | awk -F': ' '/Speed:/ {print $2}')
+    if [[ -n "$ethtool_speed" && "$ethtool_speed" != "Unknown!" ]]; then
+      echo "Negotiated Link Speed: $ethtool_speed"
+      found=true
+    fi
+  fi
+
+  if [[ "$found" == false ]]; then
+    echo "Could not determine wired link speed."
+  fi
+fi
