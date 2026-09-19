@@ -38,8 +38,8 @@ if [[ "$is_wifi" == true ]]; then
       ssid=$(echo "$iw_out" | awk -F': ' '/SSID/ {print $2}')
 
       [[ -n "$ssid" ]] && echo "SSID: $ssid"
-      [[ -n "$tx_rate" ]] && echo "TX (Upload) Link Speed:   $tx_rate"
-      [[ -n "$rx_rate" ]] && echo "RX (Download) Link Speed: $rx_rate"
+      [[ -n "$tx_rate" ]] && echo "TX (Up) Link Speed:   $tx_rate"
+      [[ -n "$rx_rate" ]] && echo "RX (Down) Link Speed: $rx_rate"
       found=true
     fi
   else
