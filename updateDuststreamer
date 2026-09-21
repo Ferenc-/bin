@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ssh Dreame '
+  cd /data/ &&
+  wget https://github.com/Hypfer/Duststreamer/releases/download/2026.08.0/duststreamer-aarch64 &&
+  mv duststreamer-aarch64 duststreamer
+'
