@@ -56,7 +56,7 @@ postmarketos() {
 
 qt() {
   NAME='Qt'
-  CURRENT='6.11.2'
+  CURRENT='6.12.0'
   LATEST="$(eolDate qt latest)"
 }
 
