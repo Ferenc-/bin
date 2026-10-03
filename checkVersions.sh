@@ -38,7 +38,7 @@ kubernetes() {
 
 opnsense() {
   NAME='OPNSense'
-  CURRENT='26.7.5'
+  CURRENT='26.7.6'
   LATEST="$(eolDate opnsense latest)"
 }
 
