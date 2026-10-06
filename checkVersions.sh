@@ -48,8 +48,8 @@ openwrt() {
   LATEST="$(eolDate openwrt latest)"
 }
 
-postmarketos() {
-  NAME='postmarketOS'
+nura() {
+  NAME='Nura'
   CURRENT='26.06'
   LATEST="$(eolDate postmarketos cycle)"
 }
@@ -60,7 +60,7 @@ qt() {
   LATEST="$(eolDate qt latest)"
 }
 
-for i in flatpakKdePlatform freedesktopsdk golang kubernetes openwrt opnsense postmarketos qt; do
+for i in flatpakKdePlatform freedesktopsdk golang kubernetes openwrt opnsense nura qt; do
   ${i}
   check
 done
