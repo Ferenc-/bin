@@ -51,7 +51,7 @@ openwrt() {
 nura() {
   NAME='Nura'
   CURRENT='26.06'
-  LATEST="$(eolDate postmarketos cycle)"
+  LATEST="$(eolDate nura cycle)"
 }
 
 qt() {
