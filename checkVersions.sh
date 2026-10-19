@@ -44,7 +44,7 @@ opnsense() {
 
 openwrt() {
   NAME='OpenWrt'
-  CURRENT='25.12.5'
+  CURRENT='25.12.6'
   LATEST="$(eolDate openwrt latest)"
 }
 
