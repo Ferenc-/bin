@@ -12,7 +12,7 @@ init_vars () {
 
 fetch () {
   # Use the binary release instead of the installer release
-  curl "https://download.clis.cloud.ibm.com/ibm-cloud-cli/${LATEST_VERSION}/binaries/IBM_Cloud_CLI_${LATEST_VERSION}_linux_amd64.tgz" \
+  curl "https://download.clis.cloud.ibm.com/ibm-cloud-cli-dn/${LATEST_VERSION}/binaries/IBM_Cloud_CLI_${LATEST_VERSION}_linux_amd64.tgz"\
     --output "/tmp/IBM_Cloud_CLI_${LATEST_VERSION}_amd64.tar.gz"
 }
 
