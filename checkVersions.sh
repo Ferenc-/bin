@@ -26,7 +26,7 @@ freedesktopsdk() {
 
 golang() {
   NAME="Golang"
-  CURRENT='1.27.2'
+  CURRENT='1.27.3'
   LATEST="$(eolDate go latest)"
 }
 
