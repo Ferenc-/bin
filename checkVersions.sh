@@ -1,7 +1,11 @@
 #!/bin/bash
 
 eolDate() {
-  curl -s "https://endoflife.date/api/${1}.json" | jq -r ".[0].${2}"
+  eolDateWithCycleIndex "${1}" '0' "${2}"
+}
+
+eolDateWithCycleIndex() {
+  curl -s "https://endoflife.date/api/${1}.json" | jq -r ".[${2}].${3}"
 }
 
 check() {
@@ -12,10 +16,18 @@ check() {
   fi
 }
 
+QT_CYCLE='6.11'
+
 flatpakKdePlatform() {
-  NAME='org.kde.Platform//6.11'
-  CURRENT='2026-09-19'
-  LATEST="$(flatpak --user remote-info --log flathub org.kde.Platform//6.11 | awk '/Date:/{ print $2; exit}')"
+  NAME="org.kde.Platform//${QT_CYCLE}"
+  CURRENT='2026-10-24'
+  LATEST="$(flatpak --user remote-info --log flathub org.kde.Platform//${QT_CYCLE} | awk '/Date:/{ print $2; exit}')"
+}
+
+flatpakKdePlatformQt() {
+  NAME="Qt in org.kde.Platform//${QT_CYCLE}"
+  CURRENT="$(flatpak run --devel --command=qmake org.kde.Sdk//${QT_CYCLE} --version | awk '/Qt version/{print $4}')"
+  LATEST="$(eolDateWithCycleIndex qt 1 latest)"
 }
 
 freedesktopsdk() {
@@ -54,13 +66,7 @@ nura() {
   LATEST="$(eolDate nura cycle)"
 }
 
-qt() {
-  NAME='Qt'
-  CURRENT='6.12.0'
-  LATEST="$(eolDate qt latest)"
-}
-
-for i in flatpakKdePlatform freedesktopsdk golang kubernetes openwrt opnsense nura qt; do
+for i in flatpakKdePlatform flatpakKdePlatformQt freedesktopsdk golang kubernetes openwrt opnsense nura; do
   ${i}
   check
 done
