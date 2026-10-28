@@ -44,7 +44,7 @@ golang() {
 
 kubernetes() {
   NAME="Kubernetes"
-  CURRENT='1.37.1'
+  CURRENT='1.37.2'
   LATEST="$(eolDate kubernetes latest)"
 }
 
