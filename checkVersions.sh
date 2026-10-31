@@ -20,7 +20,7 @@ QT_CYCLE='6.11'
 
 flatpakKdePlatform() {
   NAME="org.kde.Platform//${QT_CYCLE}"
-  CURRENT='2026-10-24'
+  CURRENT='2026-10-31'
   LATEST="$(flatpak --user remote-info --log flathub org.kde.Platform//${QT_CYCLE} | awk '/Date:/{ print $2; exit}')"
 }
 
