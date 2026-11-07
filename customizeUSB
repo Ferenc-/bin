@@ -1,0 +1,11 @@
+# https://wiki.sipeed.com/hardware/en/kvm/NanoKVM_Pro/extended.html#How-to-Modify-USB-Information
+# Modify PID
+echo "0xC31C" > /boot/usb.pid
+# Modify VID
+echo "0x046D" > /boot/usb.vid
+# Modify Manufacturer
+echo "Logitech" > /boot/usb.manufacturer
+# Modify Product Name
+echo "Logitech Keyboard K120" > /boot/usb.product
+# Apply changes
+/kvmapp/scripts/usbdev.sh restart
