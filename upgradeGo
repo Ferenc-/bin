@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Upgrade the Go version used by the project (GNU sed required).
+# Usage: scripts/upgrade-go.sh 1.27.4
+set -euo pipefail
+
+new="${1:?usage: $0 <new-go-version, e.g. 1.27.4>}"
+[[ $new =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "invalid version: $new" >&2; exit 1; }
+
+cd "$(git rev-parse --show-toplevel)"
+
+old=$(awk '/^go [0-9]/ {print $2; exit}' go.mod)
+[[ -n $old ]] || { echo "cannot read current version from go.mod" >&2; exit 1; }
+[[ $old != "$new" ]] || { echo "already on $new"; exit 0; }
+o=${old//./\\.} # escape dots for sed
+
+sed -i -E "s#^go ${o}\$#go ${new}#" go.mod
+sed -i -E "s#(self-hosted-golang:)${o}\$#\1${new}#" .sps/pipeline-config*.yaml
+sed -i -E "s#(GOTOOLCHAIN=go)${o}\b#\1${new}#" README.md
+
+# Refresh go.sum; requires network access to fetch the new toolchain
+GOTOOLCHAIN="go${new}" go mod tidy
+
+echo "Upgraded Go $old -> $new"
+git diff --stat -- go.mod go.sum README.md .sps
