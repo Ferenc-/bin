@@ -8,7 +8,7 @@ curl X GET \
   --silent \
   -H "Authorization: OAuth ${OAUTH_TOKEN}" \
   -H "Content-Type: application/json" \
-  "https://jsw.ibm.com/rest/api/latest/search?jql=${JQL_QUERY}" |
+  "https://ibm-software.atlassian.net/rest/api/3/search/jql?jql=${JQL_QUERY}" |
   jq --color-output "${JQ_FILTER}" |
   tr '\n' ' ' |
   xargs printf '%-26s | %-23s | %s\n' |
