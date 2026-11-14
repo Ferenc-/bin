@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+parseArguments() {
+  if [ $# -ne 3 ]; then
+    echo "Usage: $0 <cluster-name> <image-reference> <image-tag>"
+    exit 1
+  fi
+
+  cluster_name="$1"
+  image_reference="$2"
+  image_tag="$3"
+
+  # Basic validation
+  # cluster-name: must start with a letter and contain only letters, numbers, hyphens
+  if ! [[ "$cluster_name" =~ ^[A-Za-z][A-Za-z0-9-]*$ ]]; then
+    echo "Error: cluster-name '$cluster_name' is invalid. Use letters, numbers, and hyphens only."
+    exit 1
+  fi
+
+  # image-name: allow letters, numbers, hyphens, slashes (for registry paths)
+  if ! [[ "$image_reference" =~ ^([A-Za-z0-9.-]+|\[[0-9A-Fa-f:]+\])(:[0-9]{1,5})?/[a-z0-9]+((\.|_|__|-+)[a-z0-9]+)*(\/[a-z0-9]+((\.|_|__|-+)[a-z0-9]+)*)*$ ]]; then
+    echo "Error: image-name '$image_reference' is invalid. Use lowercase letters, numbers, hyphens, and slashes."
+    exit 1
+  fi
+
+  # image-tag: non‑empty, avoid spaces
+  if ! [[ "$image_tag" =~ ^[A-Za-z0-9_][A-Za-z0-9_.-]{0,127}$ ]]; then
+    echo "Error: image-tag '$image_tag' is invalid. Must be non‑empty and contain no spaces."
+    exit 1
+  fi
+}
+
+applyCR() {
+  kubectl apply -f- <<<"
+    apiVersion: instana.io/v1
+    kind: InstanaAgent
+    metadata:
+      name: instana-agent
+      namespace: instana-agent
+    spec:
+      cluster:
+        name: '${cluster_name}'
+      k8s_sensor:
+        #  featureFlags:
+        #    crdMonitoring: true
+        image:
+          name: '${image_reference}'
+          tag: '${image_tag}'
+      agent:
+        key: IYUKKimCQ-6qVTawqCHPEw
+        downloadKey: '$(<~/.private/DOWNLOAD_KEY)'
+        endpointHost: '$(<~/.private/ENDPOINT_URL)'
+        endpointPort: '443'
+        env:
+          K8SENSOR_ENABLE_CONTROL_PLANE_MONITORING: 'true'
+          K8SENSOR_ENABLE_CRD_CR_MONITORING: 'true'
+        configuration_yaml: |
+          # You can leave this empty, or use this to configure your instana agent.
+          # See https://ibm.biz/K8s-agent-administer
+    "
+}
+
+parseArguments "$@"
+applyCR
