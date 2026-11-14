@@ -1,0 +1,5 @@
+#!/usr/bin/env bash 
+sudo dnf install --color=always \
+	         --setopt=install_weak_deps=False \
+		 --show-new-leaves \
+		 "$@"
