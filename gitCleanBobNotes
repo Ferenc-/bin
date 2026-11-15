@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+git update-ref -d refs/notes/bob
+git gc --prune=all --aggressive
