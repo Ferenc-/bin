@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+if [[ -f /var/run/reboot-required ]]; then
+  echo "Reboot required by the following packages"
+  cat /var/run/reboot-required.pkgs
+else
+  echo "No reboot flag found"
+fi
