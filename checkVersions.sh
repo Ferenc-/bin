@@ -30,6 +30,18 @@ flatpakKdePlatformQt() {
   LATEST="$(eolDateWithCycleIndex qt 1 latest)"
 }
 
+flatpakKdePlatformQtCycle() {
+  NAME="Qt Cycle packaged in org.kde.Platform"
+  CURRENT="${QT_CYCLE}"
+  LATEST="$(flatpak --user remote-ls flathub --runtime | awk '/\<org.kde.Platform\>/{print $5}' | tail -1)"
+}
+
+qtCycle() {
+  NAME="Qt Cycle"
+  CURRENT="${QT_CYCLE}"
+  LATEST="$(eolDateWithCycleIndex qt 0 cycle)"
+}
+
 freedesktopsdk() {
   NAME="Freedesktop SDK"
   CURRENT='26.08'
@@ -66,7 +78,7 @@ nura() {
   LATEST="$(eolDate nura cycle)"
 }
 
-for i in flatpakKdePlatform flatpakKdePlatformQt freedesktopsdk golang kubernetes openwrt opnsense nura; do
+for i in flatpakKdePlatform flatpakKdePlatformQt flatpakKdePlatformQtCycle qtCycle freedesktopsdk golang kubernetes openwrt opnsense nura; do
   ${i}
   check
 done
